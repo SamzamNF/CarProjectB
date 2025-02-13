@@ -68,14 +68,14 @@
                 Console.WriteLine("\nUgyldt, du skal vælge mellem benzin eller diesel!");
             }
 
-            Console.Write("\nGodt, hvis du skulle køre en tur til et sted du havde lyst til at besøge, hvor lang ville turen så være i km? ");
+            Console.Write("\nSuper. Hvis du skulle køre en tur til et sted du havde lyst til at besøge, hvor lang ville turen så være i km? ");
             double distance = Convert.ToDouble(Console.ReadLine());
 
             double newKilometerDriven = distance + kilometerDriven;
             double fuelNeeded = distance / kmPerLiter;
             double tripCost = fuelNeeded * fuelPrice;
 
-            Console.Write("\nGodt, er du så klar til at komme af sted på turen? ");
+            Console.Write("\nEr du klar til at køre nu? ");
             string svar = Console.ReadLine().ToLower();
 
             while (svar != "ja" && svar != "yes" && svar != "yep" && svar != "ye" && svar != "yeh" && svar != "sure")
@@ -100,12 +100,16 @@
             Console.WriteLine("Nyt kilometertal: " + newKilometerDriven);
             Console.WriteLine("Liter brændstof turen kræver: " + fuelNeeded);
 
-            Console.WriteLine(string.Format("\nBrændstofudgifter for at køre {0}km er altså {1:F2} DKK", distance, tripCost));
 
-            Console.WriteLine("\nBilmærke".PadRight(15) + "Model".PadRight(15) + "Kilometertal".PadLeft(10));
-            Console.WriteLine("_____________________________________________________________________");
-            Console.WriteLine(brand.PadRight(15) + model.PadRight(15) + kilometerT.ToString().PadLeft(5));
-            Console.WriteLine(brandUser.PadRight(15) + modelUser.PadRight(15) + newKilometerDriven.ToString().PadLeft(5));
+            string recap = String.Format("Brændstofudgifter for at køre {0}km er altså {1:F2} DKK", distance, tripCost);
+            Console.WriteLine(recap);
+
+            string infoHeader = String.Format("\n|{0,-16}|{1,-16}|{2,-16}|", "Bilmærke", "Model", "Kilometertal");
+            string infoCar = String.Format("\n|{0,-16}|{1,-16}|{2,-16}|", brand, model, kilometerT);
+            string infoUserCar = String.Format("\n|{0,-16}|{1,-16}|{2,-16}|", brandUser, modelUser, newKilometerDriven);
+            string line = "\n____________________________________________________";
+
+            Console.WriteLine(infoHeader + line + infoCar + infoUserCar);
 
         }
     }
