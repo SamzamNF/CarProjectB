@@ -5,69 +5,86 @@ namespace CarProjektBeta
 {
     internal class Program
     {
+
+        static string inputBrand;
+        static string inputModel;
+        static int inputYear;
+        static char inputGeartype;
+        static double inputKilometer;
+        static string powerSource;
+        static double inputKmPerLiter;
+        static double distance;
+
         static void Main(string[] args)
         {
-            string brandUser = "", modelUser = "", pSource = "";
-            int yearUser = 0;
-            char gearTypeUser = ' ';
-            double kmPerLiter = 0, fuelPrice = 0, kilometerDriven = 0, distance = 0;
-            double fuelNeeded = distance / kmPerLiter, tripCost = fuelNeeded * fuelPrice;
 
-            // Menu
+            // Oprettelse af menu
             int choice;
             do
             {
                 Console.WriteLine("\nVælg funktion: ");
-                Console.WriteLine("1. Læs base biloplysninger");
-                Console.WriteLine("2. Indtast biloplysninger: ");
-                Console.WriteLine("3. Kør tur: ");
-                Console.WriteLine("4. Beregn turens pris: ");
-                Console.WriteLine("5. Tjek om odometer er et palindrom: ");
-                Console.WriteLine("6. Udskriv alle brugerens biloplysninger: ");
-                Console.WriteLine("7. Udskriv tabel af samlet biloplysninger");
-                Console.WriteLine("8. Udskriv gruppens biloplysninger");
-                Console.WriteLine("9. Afslut");
-
+                Console.WriteLine("1. Læs standardbils oplysninger");
+                Console.WriteLine("2. Indtast biloplysninger");
+                Console.WriteLine("3. Indtast detaljer til at køre en tur");
+                Console.WriteLine("4. Tjek prisen på din tur");
+                Console.WriteLine("5. Tjek om odometeret er et palindrom");
+                Console.WriteLine("6. Print bilernes oplysninger");
+                Console.WriteLine("7. Print gruppens biler");
+                Console.WriteLine("8. Afslut programmet");
 
                 choice = Convert.ToInt32(Console.ReadLine());
 
-                // Valgmuligheder i menu
+                // Menu valgmuligheder
                 switch (choice)
                 {
                     case 1:
-                        ReadCarDetails();
+                        CarDetails();
                         break;
                     case 2:
-                        // Indlæs brugerens biloplysninger
-                        (brandUser, modelUser, yearUser, gearTypeUser, kilometerDriven) = ReadUserCarDetails();
+                        ReadCarDetails();
                         break;
                     case 3:
-                        (kilometerDriven, distance) = Drive(kilometerDriven);
+                        Console.Write("Enter distance to drive: ");
+                        distance = Convert.ToDouble(Console.ReadLine());
+                        Drive(distance);
                         break;
                     case 4:
-                        (tripCost, pSource, fuelPrice, fuelNeeded) = TripCost(distance, fuelPrice, kmPerLiter, pSource);
+                        if (distance == 0)
+                        {
+                            Console.Write("\nHvor lang er turen på i kilometer? ");
+                            distance = Convert.ToDouble(Console.ReadLine());
+                        }
+                        Console.WriteLine($"Din tur har kostet: {TripCost(distance):F2}DKK");
                         break;
                     case 5:
-                        bool isPalindrome = Palindrom(kilometerDriven);
+                        if (Palindrom(inputKilometer))
+                        {
+                            Console.WriteLine("\nOdometeret er et palindrom!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Odometeret er ikke et palindrom!");
+                        }
                         break;
                     case 6:
-                        PrintUserCarDetails(brandUser, modelUser, pSource, yearUser,
-                        kmPerLiter, fuelPrice, kilometerDriven, distance, tripCost, fuelNeeded);
+                        PrintCarDetails();
                         break;
                     case 7:
-                        PrintCarTable(brandUser, modelUser, kilometerDriven, yearUser);
-                        break;
-                    case 8:
                         PrintTeamCarTabel();
                         break;
+                    case 8:
+                        Console.WriteLine("Afslutter programmet...");
+                        break;
+                    default:
+                        Console.WriteLine("Ugyldigt valg, prøv igen.");
+                        break;
                 }
-            }
-            while (choice != 9);
+
+            } while (choice != 8);  // Sørg for at afslutte når valget er 6
         }
 
-        static void ReadCarDetails()
+        static void CarDetails()
         {
-            // Oplysninger om en standardbil
             string brand = "Toyota";
             string model = "Corolla";
             int year = 2020;
@@ -76,95 +93,72 @@ namespace CarProjektBeta
             int kilometerT = 23211;
             double kmPerLiterT = 19.5;
 
-            Console.WriteLine("\nBilens mærke er: " + brand);
+            Console.WriteLine("Bilens mærke er: " + brand);
             Console.WriteLine("Bilens model er: " + model);
             Console.WriteLine("Bilens årgang er: " + year);
             Console.WriteLine("Bilens geartype er: " + gearType);
             Console.WriteLine("Bilens drivmiddel er: " + powerSource);
-            Console.WriteLine("Bilen har kørt: " + kilometerT + "km");
+            Console.WriteLine("Bilen har kørt: " + kilometerT);
             Console.WriteLine("Bilen kører: " + kmPerLiterT + " på literen");
 
             Console.Write("\nTryk på Enter for at gå tilbage til menuen...");
             Console.ReadLine();
         }
-
-        static (string, string, int, char, double) ReadUserCarDetails()
+        static void ReadCarDetails()
         {
-            // Indhenter brugerens biloplysninger og returner dem
             Console.Write("\nIndtast bilens mærke: ");
-            string brandUser = Console.ReadLine();
-
+            inputBrand = Console.ReadLine();
             Console.Write("Indtast bilens model: ");
-            string modelUser = Console.ReadLine();
-
+            inputModel = Console.ReadLine();
             Console.Write("Indtast bilens årgang: ");
-            int yearUser = Convert.ToInt32(Console.ReadLine());
-
-            Console.Write("Indtast bilens geartype (A for automat, M for manual): ");
-            char gearTypeUser = Console.ReadLine()[0];
-
-            Console.Write("Hvor mange kilometer har din bil kørt i alt? ");
-            double kilometerDriven = Convert.ToInt32(Console.ReadLine());
+            inputYear = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Indtast bilens geartype(A for automat, M for manual): ");
+            inputGeartype = Console.ReadLine()[0];
+            Console.Write("Indtast bilens kilometer: ");
+            inputKilometer = Convert.ToDouble(Console.ReadLine());
+            Console.Write("Hvor mange km/l kører din bil? ");
+            inputKmPerLiter = Convert.ToDouble(Console.ReadLine());
 
             Console.Write("\nTryk på Enter for at gå tilbage til menuen...");
             Console.ReadLine();
-
-            return (brandUser, modelUser, yearUser, gearTypeUser, kilometerDriven);
         }
 
-        static (double, double) Drive(double kilometerDriven)
-        {
-            Console.Write("\nDu har valgt at køre en tur, lad os se om du er klar!");
 
+        static void Drive(double distance)
+        {
             Console.Write("\nEr bilen tændt? ");
             string svar = Console.ReadLine().ToLower();
 
             bool isEngineOn = svar == "ja" || svar == "yes" || svar == "yep" || svar == "ye" || svar == "yeh" || svar == "sure";
-
-            double distance = 0;
-
-            if (isEngineOn)  // True hvis man bruger en af keywords. || = Eller
+            if (isEngineOn)                                                         // True hvis man bruger en af keywords. || = Eller
             {
                 Console.Write("Godt, så er er du klar til at komme afsted");
 
-                Console.Write("\nHvor lang er turen på i kilometer? ");
-                distance = Convert.ToDouble(Console.ReadLine());
-
-                kilometerDriven += distance;  // += = at man tager værdien på venstre sider og +'er på højre side
-                Console.WriteLine($"Dit nye kilometertal er {kilometerDriven}km");
-
+                inputKilometer += distance;                                         // += = at man tager værdien på venstre sider og +'er på højre side
+                Console.WriteLine($"\nDit nye kilometertal er {inputKilometer}km");
             }
             else
             {
                 Console.Write("\nDu må starte bilen først..");
             }
+
             Console.Write("\nTryk på Enter for at gå tilbage til menuen...");
             Console.ReadLine();
-
-            return (kilometerDriven, distance);
         }
 
-        static (double tripCost, string pSource, double fuelPrice, double fuelNeeded) TripCost(double distance, double fuelPrice, double kmPerLiter, string pSource)
-        // Det til venstre er det som bliver returnet. Det til højre er det vi kalder på ind i metoden.
+        static double TripCost(double distance)
         {
-            if (distance == 0)
-            {
-                Console.Write("\nHvor lang er turen på i kilometer? ");
-                distance = Convert.ToDouble(Console.ReadLine());
-            }
+            Console.Write("\nHvilken type brændstof bruger din bil? Benzin eller Diesel? ");
+            powerSource = Console.ReadLine().ToLower();
+            double fuelPrice = 0;
 
-            Console.Write("Hvor mange km/l kører din bil tror du? ");
-            kmPerLiter = Convert.ToDouble(Console.ReadLine());
 
-            Console.Write("Hvilken type brændstof bruger din bil? Benzin eller Diesel? ");
-            pSource = Console.ReadLine().ToLower();
-
-            if (pSource == "benzin")
+            if (powerSource == "benzin")
             {
                 fuelPrice = 13.49;
                 Console.WriteLine("\nModtaget, din bil kører altså på benzin til en pris på 13.49kr per liter");
             }
-            else if (pSource == "diesel")
+            else if (powerSource == "diesel")
             {
                 fuelPrice = 12.29;
                 Console.WriteLine("\nModtaget, din bil kører altså på diesel til en pris på 12.29kr per liter");
@@ -173,74 +167,43 @@ namespace CarProjektBeta
             {
                 Console.WriteLine("\nUgyldt, du skal vælge mellem benzin eller diesel!");
             }
-            double fuelNeeded = distance / kmPerLiter, tripCost = fuelNeeded * fuelPrice;
-            Console.WriteLine($"Din tur på {distance}km har altså kostet {tripCost:F2}DKK");
-
+            
             Console.Write("\nTryk på Enter for at gå tilbage til menuen...");
             Console.ReadLine();
 
-            return (tripCost, pSource, fuelPrice, fuelNeeded);
+            return (distance / inputKmPerLiter) * fuelPrice;
 
-            // Sender ikke kilometer / distance tilbage til main her. Blot for at programmet ikke skal gå i stå hvis man ikke har indtastet det.
         }
-
-        static bool Palindrom(double kilometerDriven)
+        static bool Palindrom(double inputKilometer)
         {
-            string kilometerStr = kilometerDriven.ToString();
-
-            string reverseStr = new string(kilometerStr.Reverse().ToArray());  // Vender den nydannede streng om (ToArray = man laver den samlede "tekst" om til enkelte bogstaver / tal, det er nødvendigt for at vende den om)
-
-            bool isPalindrome = kilometerStr == reverseStr;                    // Tjekker om den omvendte streng er = den gamle.
-
-            if (isPalindrome)
-            {
-                Console.WriteLine("\nOdometeret er et palindrom");
-            }
-            else
-            {
-                Console.WriteLine("\nOdometeret er ikke et palindrom");
-            }
-            Console.Write("\nTryk på Enter for at gå tilbage til menuen...");
-            Console.ReadLine();
-
-            return isPalindrome;
-        }
-
-        static void PrintUserCarDetails(string brandUser, string modelUser, string pSource, int yearUser,
-        double kmPerLiter, double fuelPrice, double kilometerDriven, double distance, double tripCost, double fuelNeeded)
-        {
-            Console.WriteLine("\n--- Biloplysninger ---");
-            Console.WriteLine($"Mærke: {brandUser}");
-            Console.WriteLine($"Model: {modelUser}");
-            Console.WriteLine($"Årgang: {yearUser}");
-            Console.WriteLine($"Brændstoftype: {pSource}");
-            Console.WriteLine($"Kilometertal: {kilometerDriven}km");
-            Console.WriteLine($"Km/l: {kmPerLiter}");
-
-            Console.WriteLine("\n--- Turoplysninger ---");
-            Console.WriteLine($"Turens distance: {distance}km");
-            Console.WriteLine($"Turns pris: {tripCost}DKK");
-            Console.WriteLine($"Brændstofsprisen pr liter: {fuelPrice:F2}DKK");
-            Console.WriteLine($"Brændstof brugt: {fuelNeeded:F2}l");
+            string kilometerStr = inputKilometer.ToString();
+            string reverseStr = new string(kilometerStr.Reverse().ToArray());   // Vender den nydannede streng om (ToArray = man laver den samlede "tekst" om til enkelte bogstaver / tal, det er nødvendigt for at vende den om)
 
             Console.Write("\nTryk på Enter for at gå tilbage til menuen...");
             Console.ReadLine();
+
+            return kilometerStr == reverseStr;                                  // Tjekker om den omvendte streng er = den gamle.
+          
         }
 
-        static void PrintCarTable(string brandUser, string modelUser, double kilometerDriven, int yearUser)
+        static void PrintCarDetails()
         {
             // Oplysninger om en standardbil
             string brand = "Toyota";
             string model = "Corolla";
             int year = 2020;
             int kilometerT = 23211;
+            double kmPerLiterT = 19.5;
+            string powerSourceT = "Diesel";
 
-            string infoHeader = String.Format("\n|{0,-10}|{1,-10}|{2,-10}|{3,-10}|", "Bilmærke", "Model", "Odometer", "Årgang");
-            string infoCar = String.Format("\n|{0,-10}|{1,-10}|{2,-10}|{3,-10}|", brand, model, kilometerT, year);
-            string infoUserCar = String.Format("\n|{0,-10}|{1,-10}|{2,-10}|{3,-10}|", brandUser, modelUser, kilometerDriven, yearUser);
-            string line = String.Format("\n_____________________________________");
+            string infoHeader = String.Format("\n|{0,-10}|{1,-10}|{2,-10}|{3,-10}|", "Bilmærke", "Model", "Odometer", "Km/l", "Brændstofstype", "Årgang");
+            string infoCar = String.Format("\n|{0,-10}|{1,-10}|{2,-10}|{3,-10}|", brand, model, kilometerT, kmPerLiterT, powerSourceT, year);
+            string infoUserCar = String.Format("\n|{0,-10}|{1,-10}|{2,-10}|{3,-10}|", inputBrand, inputModel, inputKilometer, inputKmPerLiter, powerSource, inputYear);
+            string line = String.Format("\n____________________________________________");
 
             Console.WriteLine(infoHeader + line + infoCar + infoUserCar);
+
+            Console.WriteLine($"Din tur har kostet på {distance}km {TripCost(distance):F2}DKK");
 
             Console.Write("\nTryk på Enter for at gå tilbage til menuen...");
             Console.ReadLine();
@@ -276,6 +239,9 @@ namespace CarProjektBeta
             Console.Write("\nTryk på Enter for at gå tilbage til menuen...");
             Console.ReadLine();
         }
+
+
+
     }
 
 }
