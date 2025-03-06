@@ -12,16 +12,16 @@ C:\Users\Friis\Desktop\Projekter\CarProjektBeta\CarProjektBeta\obj\Debug\net8.0\
 C:\Users\Friis\Desktop\Projekter\CarProjektBeta\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.pdb
 C:\Users\Friis\Desktop\Projekter\CarProjektBeta\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.genruntimeconfig.cache
 C:\Users\Friis\Desktop\Projekter\CarProjektBeta\CarProjektBeta\obj\Debug\net8.0\ref\CarProjektBeta.dll
-C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.exe
-C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.deps.json
-C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.runtimeconfig.json
-C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.dll
-C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.pdb
 C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.AssemblyInfoInputs.cache
 C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.AssemblyInfo.cs
 C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.csproj.CoreCompileInputs.cache
 C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.sourcelink.json
+C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.exe
+C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.deps.json
+C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.runtimeconfig.json
+C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.dll
+C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\bin\Debug\net8.0\CarProjektBeta.pdb
 C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.dll
 C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\obj\Debug\net8.0\refint\CarProjektBeta.dll
 C:\Users\Friis\Desktop\Bøger\GIT Projekter\CarProjektBeta\CarProjectB\CarProjektBeta\obj\Debug\net8.0\CarProjektBeta.pdb
