@@ -2,6 +2,15 @@
 
 namespace CarProjektBeta
 {
+
+    public enum FuelType
+    {
+        None,
+        Diesel,
+        Benzin,
+        El,
+        Hybrid
+    }
     public class Car
     {
         // Private felter (attributter)
@@ -9,21 +18,23 @@ namespace CarProjektBeta
         private string _model;
         private int _year;
         private double _kilometer;
-        private string _fuelSource;
+        private FuelType _fuelSource;
         private double _kmPerLiter;
         private double _fuelPrice;
         private bool _isEngineOn;
+        private List<Trip> _trips;
 
         // Konstruktør
-        public Car(string brand, string model, int year, double odometer, string fuelSource, double kmPerLiter)
+        public Car(string brand, string model, int year, double odometer, FuelType fuelSource, double kmPerLiter)
         {
             _brand = brand;
             _model = model;
             _year = year;
             Odometer = odometer;
-            this.FuelSource = fuelSource;
+            FuelSource = fuelSource;
             KmPerLiter = kmPerLiter;
             _isEngineOn = false;
+            _trips = new List<Trip>();
         }
 
         // Manuelt implementeret property
@@ -43,25 +54,29 @@ namespace CarProjektBeta
             get { return _year; }
             set { _year = value; }
         }
-        public string FuelSource
+        public FuelType FuelSource
         {
             get { return _fuelSource; }
             set
             {
-                _fuelSource = value.ToLower();
+                _fuelSource = value;
 
-                if (_fuelSource == "benzin")
+                switch (_fuelSource)
                 {
-                    _fuelPrice = 13.49;
-                }
-                else if (_fuelSource == "diesel")
-                {
-                    _fuelPrice = 12.29;
-                }
-                else
-                {
-                    Console.WriteLine("Ugyldigt brændstof! Vælg mellem benzin eller diesel.");
-                    _fuelPrice = 0;
+                    case FuelType.Benzin:
+                        _fuelPrice = 13.49;
+                        break;
+                    case FuelType.Diesel:
+                        _fuelPrice = 12.29;
+                        break;
+                    case FuelType.El:
+                        _fuelPrice = 2;
+                        break;
+                    case FuelType.Hybrid:
+                        _fuelPrice = 9.5;
+                        break;
+                    default:
+                        throw new ArgumentException("Ugyldigt brændstof! Vælg mellem benzin, diesel, el eller hybrid.");
                 }
             }
         }
@@ -104,6 +119,10 @@ namespace CarProjektBeta
         {
             get { return _isEngineOn; }
         }
+        public List<Trip> Trips
+        {
+            get { return _trips; }
+        }
         // Metoder
 
         public void ToggleEngine(bool value)
@@ -118,22 +137,19 @@ namespace CarProjektBeta
             }
             _isEngineOn = value;
         }
-        public void Drive(double distance)
+        public void Drive(Trip newTrip)
         {
             if (_isEngineOn)
             {
-                _kilometer += distance;
-                Console.WriteLine($"Du har kørt {distance}km. Nyt kilometertal: {_kilometer}km");
+                _kilometer += newTrip.Distance;
+                Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {_kilometer}km");
+                _trips.Add(newTrip);
             }
             else
             {
                 Console.WriteLine("Du skal starte motoren først..");
             }
-        }
-        public double CalculateTripPrice(double distance)
-        {
-            return (distance / _kmPerLiter) * _fuelPrice;
-        }
+        }      
         public void PrintCar(bool First = false)
         {
             string infoHeader = String.Format("| {0,-13} | {1,-10} | {2,-10} | {3,-10} | {4,-10} |", "Bilmærke", "Model", "Odometer", "Km/l", "Årgang");
