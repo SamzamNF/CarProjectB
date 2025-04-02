@@ -32,9 +32,9 @@ namespace CarProjektBeta
             _year = year;
             Odometer = odometer;
             FuelSource = fuelSource;
-            KmPerLiter = kmPerLiter;
+            _kmPerLiter = kmPerLiter;
             _isEngineOn = false;
-            _trips = new List<Trip>();
+            _trips = new List<Trip>();           
         }
 
         // Manuelt implementeret property
@@ -70,7 +70,7 @@ namespace CarProjektBeta
                         _fuelPrice = 12.29;
                         break;
                     case FuelType.El:
-                        _fuelPrice = 2;
+                        _fuelPrice = 8;
                         break;
                     case FuelType.Hybrid:
                         _fuelPrice = 9.5;
@@ -142,7 +142,6 @@ namespace CarProjektBeta
             if (_isEngineOn)
             {
                 _kilometer += newTrip.Distance;
-                Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {_kilometer}km");
                 _trips.Add(newTrip);
             }
             else
@@ -165,6 +164,19 @@ namespace CarProjektBeta
             string carDetails = string.Format("| {0,-13} | {1,-10} | {2,-10} | {3,-10} | {4,-10} |", Brand, Model, Odometer, KmPerLiter, Year);
             Console.WriteLine(carDetails);
             Console.WriteLine(line);
+        }
+        public List<Trip> GetTripsByDate(DateTime date)
+        {
+            List<Trip> tripsByDate = new();
+
+            for (int i = 0; i < Trips.Count; i++)
+            {
+                if (Trips[i].TripDate == date)
+                {
+                    tripsByDate.Add(Trips[i]);
+                }
+            }
+            return tripsByDate;
         }
     }
 

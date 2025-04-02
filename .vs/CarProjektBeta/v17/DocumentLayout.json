@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\carclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\carclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A6D17916-10E4-4C68-9442-2D2431C3EF1D}|TestUnitBilProjektBeta\\TestUnitBilProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\testunitbilprojektbeta\\test1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D17916-10E4-4C68-9442-2D2431C3EF1D}|TestUnitBilProjektBeta\\TestUnitBilProjektBeta.csproj|solutionrelative:testunitbilprojektbeta\\test1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\tripclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -22,48 +26,64 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Test1.cs",
+              "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\TestUnitBilProjektBeta\\Test1.cs",
+              "RelativeDocumentMoniker": "TestUnitBilProjektBeta\\Test1.cs",
+              "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\TestUnitBilProjektBeta\\Test1.cs",
+              "RelativeToolTip": "TestUnitBilProjektBeta\\Test1.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAwwE4AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-23T18:37:02.3Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Tripclass.cs",
               "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Tripclass.cs",
               "RelativeDocumentMoniker": "CarProjektBeta\\Tripclass.cs",
               "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Tripclass.cs",
               "RelativeToolTip": "CarProjektBeta\\Tripclass.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAIwCsAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-11T22:46:20.195Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Carclass.cs",
               "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Carclass.cs",
               "RelativeDocumentMoniker": "CarProjektBeta\\Carclass.cs",
               "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Carclass.cs",
               "RelativeToolTip": "CarProjektBeta\\Carclass.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHsAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAYwEIAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-28T19:47:53.618Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-28T19:47:53.618Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Program.cs",
               "RelativeDocumentMoniker": "CarProjektBeta\\Program.cs",
               "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Program.cs",
               "RelativeToolTip": "CarProjektBeta\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAADEAAAAAAAAAAAAgwGEAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-13T14:43:54.346Z"
+              "WhenOpened": "2025-02-13T14:43:54.346Z",
+              "EditorCaption": ""
             }
           ]
         }

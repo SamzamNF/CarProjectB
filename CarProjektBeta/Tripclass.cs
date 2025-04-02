@@ -34,7 +34,17 @@ namespace CarProjektBeta
         public double Distance
         {
             get { return _distance; }
-            set { _distance = value; }
+            set
+            {
+                if (value >= 0)
+                {
+                    _distance = value;
+                }
+                else
+                {
+                    Console.WriteLine("Indtast en distance der er mere end 0..");
+                }
+            }
         }
         public double CalculateTripPrice(Car car)
         {
@@ -62,7 +72,7 @@ namespace CarProjektBeta
                 Console.WriteLine(line);
             }
 
-            string tripDetails = String.Format("| {0,-10} | {1,-19} | {2,-19} | {3,-12} | {4,-15:F2} | {5,-10:F2} | ", Distance, StartTime, EndTime, CalculateDuration(), FuelConsumed(car), CalculateTripPrice(car));
+            string tripDetails = String.Format("| {0,-10} | {1,-19} | {2,-19} | {3,-12} | {4,-15:F2} | {5,-10:F2} | ", Distance, StartTime, EndTime, CalculateDuration().ToString(@"hh\:mm\:ss"), FuelConsumed(car), CalculateTripPrice(car));
             Console.WriteLine(tripDetails);
             Console.WriteLine(line);
         }

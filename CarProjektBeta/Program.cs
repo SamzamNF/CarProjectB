@@ -1,4 +1,5 @@
-﻿using CarProjektBeta;
+﻿using System;
+using CarProjektBeta;
 
 namespace BilProjektBeta
 {
@@ -9,6 +10,12 @@ namespace BilProjektBeta
             int choice;
             Car userCar = null;
             Trip newTrip = null;
+            List<Trip> trips = new List<Trip>()   // Slet alt dette hvis du gemmer ture permanent samt .ToString i PrintTripDetails hvor den regner tiden ud. Også slet argument der tilføjer alle disse ture i case 7
+            {
+                new Trip(50, DateTime.Now.Date, DateTime.Now, DateTime.Now.AddHours(1)),
+                new Trip(250, DateTime.Now.Date.AddDays(1), DateTime.Now.AddDays(1), DateTime.Now.AddDays(1).AddHours(2)),
+                new Trip(450, DateTime.Now.Date.AddDays(3), DateTime.Now.AddDays(3), DateTime.Now.AddDays(3).AddHours(3)),
+            };           
 
             do
             {
@@ -21,6 +28,7 @@ namespace BilProjektBeta
                 Console.WriteLine("6. Print gruppens biler");
                 Console.WriteLine("7. Print tur pris");
                 Console.WriteLine("8. Afslut programmet");
+                Console.Write("Tast dit svar: ");
 
                 choice = Convert.ToInt32(Console.ReadLine());
 
@@ -32,7 +40,7 @@ namespace BilProjektBeta
                     case 2:
                         if (userCar != null)
                         {
-                            Console.Write("Vil du tænde eller slukke moteren? ");
+                            Console.Write("\nVil du tænde eller slukke moteren? ");
                             string engineChoice = Console.ReadLine().ToLower();
                             if (engineChoice == "tænd" || engineChoice == "tænde")
                             {
@@ -56,8 +64,9 @@ namespace BilProjektBeta
                         if (userCar != null)
                         {
                             newTrip = CreateTrip();
-
                             userCar.Drive(newTrip);
+
+                            Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {userCar.Odometer}km");
                         }
                         else
                         {
@@ -85,11 +94,46 @@ namespace BilProjektBeta
                         PrintTeamCarTabel();
                         break;
                     case 7:
-                        if (userCar != null && newTrip != null)         // userCar = objektet til min bil fra car klasse, .Trips er public propety til at get min private liste information så det kan printes. Count tæller listen.
-                        {                           
-                            for (int i = 0; i < userCar.Trips.Count; i++)
+                        if (userCar != null)         // userCar = objektet til min bil fra car klasse, .Trips er public propety til at get min private liste information så det kan printes. Count tæller listen.
+                        {
+                            Console.Write("\nTast 1 for at se alle tures priser:");
+                            Console.Write("\nTast 2 for at søge efter en tur: ");
+                            int tripChoice = Convert.ToInt32(Console.ReadLine());
+                            switch (tripChoice)
                             {
-                                userCar.Trips[i].PrintTripDetails(userCar, i == 0);
+                                case 1:
+                                    for (int i = 0; i < trips.Count; i++)      // slet denne for-loop når perm-trip data bliver implementeret
+                                    {
+                                        userCar.Drive(trips[i]);
+                                    }
+
+                                    for (int i = 0; i < userCar.Trips.Count; i++)
+                                    {
+                                        userCar.Trips[i].PrintTripDetails(userCar, i == 0);
+                                    }
+                                    break;
+                                case 2:
+                                    Console.Write("Indtast datoen for at finde ture (dd-MM-yyyy): ");
+                                    DateTime date = Convert.ToDateTime(Console.ReadLine());
+
+                                    List<Trip> tripsByDate = userCar.GetTripsByDate(date);
+
+                                    if (tripsByDate.Count == 0)
+                                    {
+                                        Console.WriteLine("Ingen ture blev fundet på denne dato");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"\nDer blev fundet {tripsByDate.Count} tur(e) på datoen.");
+
+                                        for (int i = 0; i < tripsByDate.Count; i++)
+                                        {
+                                            tripsByDate[i].PrintTripDetails(userCar, i == 0);
+                                        }
+                                    }
+                                    Console.WriteLine("\nTryk enter for at gå tilbage til menuen..");
+                                    Console.ReadLine();
+                                    break;
                             }
                         }
                         else
@@ -107,6 +151,7 @@ namespace BilProjektBeta
             } while (choice != 8);
 
         }
+        
         static Car CreateCar()
         {
 
@@ -155,24 +200,26 @@ namespace BilProjektBeta
             }
             return newCar;
         }
+        
         static Trip CreateTrip()
         {
-            Console.Write("Indtast antal kilometer for turen: ");
+            Console.Write("\nIndtast antal kilometer for turen: ");
             double distance = Convert.ToDouble(Console.ReadLine());
 
             Console.Write("Indtast dato for turen: (dd/mm/yyyy): ");
             DateTime tripDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
 
-            Console.Write("Indtast starttidspunkt (Time:minut): ");
+            Console.Write("Indtast starttidspunkt (HH:mm): ");
             DateTime startTime = DateTime.ParseExact(Console.ReadLine(), "HH:mm", null);
             startTime = tripDate.Date + startTime.TimeOfDay; // Kombiner dato og tid
 
-            Console.Write("Indtast sluttidspunkt (Time:minut): ");
+            Console.Write("Indtast sluttidspunkt (HH:mm): ");
             DateTime endTime = DateTime.ParseExact(Console.ReadLine(), "HH:mm", null);
             endTime = tripDate.Date + endTime.TimeOfDay; // Kombiner dato og tid
 
             return new Trip(distance, tripDate, startTime, endTime);
         }
+        
         static bool Palindrom(double odometer)
         {
             string kilometerStr = odometer.ToString();
@@ -180,6 +227,7 @@ namespace BilProjektBeta
 
             return kilometerStr == reverseStr;
         }
+        
         static void PrintTeamCarTabel()
         {
             Car[] teamCars = new Car[]
