@@ -178,7 +178,32 @@ namespace CarProjektBeta
             }
             return tripsByDate;
         }
+
+
+        //Metoder til at gemme filer
+        public override string ToString()
+        {
+            return $"{Brand};{Model};{Odometer};{_fuelSource};{KmPerLiter};{Year}";
+        }
+        public static Car FromString(string data)
+        {
+            string[] parts = data.Split(';');
+            if (parts.Length < 6) return null;
+
+            string brand = parts[0];
+            string model = parts[1];
+            double odometer = double.Parse(parts[2]);
+            FuelType fuelSource = Enum.Parse<FuelType>(parts[3]);
+            double kmPerLiter = double.Parse(parts[4]);
+            int year = int.Parse(parts[5]);
+
+            Car car = new Car(brand, model, year, odometer, fuelSource, kmPerLiter);
+
+            return car;
+
+        }
     }
+
 
 
 }

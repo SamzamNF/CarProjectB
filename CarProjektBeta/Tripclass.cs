@@ -77,6 +77,24 @@ namespace CarProjektBeta
             Console.WriteLine(line);
         }
 
+        //Metoder til filer
+        public override string ToString()
+        {
+            return $"{Distance};{TripDate:dd/MM/yyyy};{StartTime:HH:mm};{EndTime:HH:mm}";
+        }
+        public static Trip FromString(string data)
+        {
+            string[] parts = data.Split(';');
+            if (parts.Length != 4) return null;
+
+            double distance = double.Parse(parts[0]);
+            DateTime tripDate = DateTime.ParseExact(parts[1], "dd/MM/yyyy", null);
+            DateTime startTime = DateTime.ParseExact(parts[2], "HH:mm", null);
+            DateTime endTime = DateTime.ParseExact(parts[3], "HH:mm", null);
+
+            return new Trip(distance, tripDate, startTime, endTime);
+        }
+
     }
     
 

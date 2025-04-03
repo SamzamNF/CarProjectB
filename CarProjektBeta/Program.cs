@@ -1,43 +1,80 @@
 ﻿using System;
+using System.Collections.Generic;
 using CarProjektBeta;
 
 namespace BilProjektBeta
 {
     internal class Program
     {
+        static Datahandler datahandler = new Datahandler("CarsAndTrips.txt");
+        static List<Car> cars = new List<Car>();
+
         static void Main(string[] args)
         {
+
+            cars = datahandler.LoadCarsAndTrips();
             int choice;
             Car userCar = null;
             Trip newTrip = null;
-            List<Trip> trips = new List<Trip>()   // Slet alt dette hvis du gemmer ture permanent samt .ToString i PrintTripDetails hvor den regner tiden ud. Også slet argument der tilføjer alle disse ture i case 7
-            {
-                new Trip(50, DateTime.Now.Date, DateTime.Now, DateTime.Now.AddHours(1)),
-                new Trip(250, DateTime.Now.Date.AddDays(1), DateTime.Now.AddDays(1), DateTime.Now.AddDays(1).AddHours(2)),
-                new Trip(450, DateTime.Now.Date.AddDays(3), DateTime.Now.AddDays(3), DateTime.Now.AddDays(3).AddHours(3)),
-            };           
-
             do
             {
                 Console.WriteLine("\nVælg funktion: ");
-                Console.WriteLine("1. Indtast biloplysninger");
-                Console.WriteLine("2. Tænd eller sluk moteren");
-                Console.WriteLine("3. Kør en tur");
-                Console.WriteLine("4. Tjek om odometeret er et palindrom");
-                Console.WriteLine("5. Print bilernes oplysninger");
-                Console.WriteLine("6. Print gruppens biler");
-                Console.WriteLine("7. Print tur pris");
-                Console.WriteLine("8. Afslut programmet");
+                Console.WriteLine("1. Tilføj bil");
+                Console.WriteLine("2. Slet bil");
+                Console.WriteLine("3. Vælg bil");
+                Console.WriteLine("4. Tænd eller sluk moteren");
+                Console.WriteLine("5. Kør en tur");
+                Console.WriteLine("6. Tjek om odometeret er et palindrom");
+                Console.WriteLine("7. Print bilernes oplysninger");
+                Console.WriteLine("8. Print tur pris");
+                Console.WriteLine("9. Afslut programmet");
+                
                 Console.Write("Tast dit svar: ");
+
 
                 choice = Convert.ToInt32(Console.ReadLine());
 
                 switch (choice)
                 {
                     case 1:
-                        userCar = CreateCar();
+                        Console.Clear();
+                        userCar = CreateCar(datahandler);
+
+                        MenuReturn();
                         break;
                     case 2:
+                        Console.Clear();
+                        if (cars.Count == 0)
+                        {
+                            Console.WriteLine("Der findes ingen biler i databasen");
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            CarList();
+
+                            Console.Write("Vælg model du gerne vil slette: ");
+                            string modelName = Console.ReadLine();
+                            datahandler.DeleteCarByModel(modelName);
+
+                            //Sætter cars listen = filens indhold.
+                            cars = datahandler.LoadCarsAndTrips();
+                        }
+                        
+                        MenuReturn();
+                        break;
+                    case 3:
+                        Console.Clear();
+                        CarList();
+                        Console.Write("Vælg modelnavn for at bruge bilen: ");
+                        string modelPick = Console.ReadLine();
+
+                        userCar = ChooseCar(cars, modelPick);
+
+                        MenuReturn();
+                        break;
+                    case 4:
+                        Console.Clear();
                         if (userCar != null)
                         {
                             Console.Write("\nVil du tænde eller slukke moteren? ");
@@ -59,21 +96,40 @@ namespace BilProjektBeta
                         {
                             Console.WriteLine("Opret en bil i menu 1 først..");
                         }
+
+                        MenuReturn();
                         break;                 
-                    case 3:
+                    case 5:
+                        //Tilføj tur til bil                        
+                        Console.Clear();
                         if (userCar != null)
                         {
                             newTrip = CreateTrip();
                             userCar.Drive(newTrip);
 
                             Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {userCar.Odometer}km");
+
+                            //Finder den aktive "userCar" der er valgt, og matcher den med den i listen.
+                            for (int i = 0; i < cars.Count; i++)
+                            {
+                                if (cars[i].Model == userCar.Model)
+                                {
+                                    cars[i] = userCar;
+                                    break;
+                                }
+                            }
+                            //Tilføjer dataen til filen, så den passer til den rigtige bil
+                            datahandler.AddCarsAndTrips(cars);
                         }
                         else
                         {
                             Console.WriteLine("Opret en bil i menu 1 først..");
                         }
+
+                        MenuReturn();
                         break;
-                    case 4:
+                    case 6:
+                        Console.Clear();
                         if (userCar != null)
                         {
                             if (Palindrom(userCar.Odometer))
@@ -85,16 +141,29 @@ namespace BilProjektBeta
                                 Console.WriteLine("Odometeret er ikke et palindrom!");
                             }
                         }
-                        break;
-                    case 5:
-                        if (userCar != null)
-                            userCar.PrintCar(true);
-                        break;
-                    case 6:
-                        PrintTeamCarTabel();
+
+                        MenuReturn();
                         break;
                     case 7:
-                        if (userCar != null)         // userCar = objektet til min bil fra car klasse, .Trips er public propety til at get min private liste information så det kan printes. Count tæller listen.
+                        Console.Clear();
+                        if (cars.Count == 0)
+                        {
+                            Console.WriteLine("Der er ingen biler i databasen");
+                        }
+                        else
+                        {
+                            for (int i = 0; i < cars.Count; i++)
+                            {
+                                cars[i].PrintCar(i == 0);
+                            }
+                        }
+                        MenuReturn();
+                        break;
+                    case 8:
+                        
+                        // userCar = objektet til min bil fra car klasse, .Trips er public propety til at get min private liste information så det kan printes. Count tæller listen.
+                        
+                        if (userCar != null)       
                         {
                             Console.Write("\nTast 1 for at se alle tures priser:");
                             Console.Write("\nTast 2 for at søge efter en tur: ");
@@ -102,11 +171,6 @@ namespace BilProjektBeta
                             switch (tripChoice)
                             {
                                 case 1:
-                                    for (int i = 0; i < trips.Count; i++)      // slet denne for-loop når perm-trip data bliver implementeret
-                                    {
-                                        userCar.Drive(trips[i]);
-                                    }
-
                                     for (int i = 0; i < userCar.Trips.Count; i++)
                                     {
                                         userCar.Trips[i].PrintTripDetails(userCar, i == 0);
@@ -141,7 +205,7 @@ namespace BilProjektBeta
                             Console.WriteLine("Husk at oprette en bil og tur detaljer først..");
                         }
                         break;
-                    case 8:
+                    case 9:
                         Console.WriteLine("Afslutter programmet...");
                         break;
                     default:
@@ -152,7 +216,7 @@ namespace BilProjektBeta
 
         }
         
-        static Car CreateCar()
+        static Car CreateCar(Datahandler datahandler)
         {
 
             Car newCar = null;
@@ -171,7 +235,6 @@ namespace BilProjektBeta
                     double odometer = Convert.ToDouble(Console.ReadLine());
                     Console.Write("Hvor mange km/l kører din bil? ");
                     double kmPerLiter = Convert.ToDouble(Console.ReadLine());
-
                     Console.Write("Indtast bilens brændstofstype: ");
                     string fuelInput = Console.ReadLine().ToLower();
 
@@ -187,7 +250,10 @@ namespace BilProjektBeta
 
                     newCar = new Car(brand, model, year, odometer, fuelSource, kmPerLiter);
 
-                    
+                    cars.Add(newCar);
+                    datahandler.AddCarsAndTrips(cars);
+                    Console.WriteLine("Bilen blev oprettet og gemt i filen.");
+
                 }
                 catch (Exception ex)
                 {
@@ -227,25 +293,43 @@ namespace BilProjektBeta
 
             return kilometerStr == reverseStr;
         }
-        
-        static void PrintTeamCarTabel()
+       static void CarList()
         {
-            Car[] teamCars = new Car[]
-            {
-                new Car("Audi", "A8", 2020, 15212, FuelType.Benzin, 14.3),
-                new Car("BMW", "X5", 2021, 21000, FuelType.Diesel, 13.5),
-                new Car("Honda", "Civic", 2016, 125020, FuelType.Benzin, 21.3),
-                new Car("VW", "Golf", 2013, 95500, FuelType.Diesel, 17.4),
-                new Car("Fiat", "500", 2014, 83121, FuelType.Benzin, 16.5)
-            };
+            Console.WriteLine("\nFølgende biler findes i databasen");
+            string infoHeader = string.Format("{0,-15} {1,-15} {2,-10}", "Mærke", "Model", "Årgang");
+            Console.WriteLine(infoHeader);
+            Console.WriteLine(new string('-', 45));
 
-
-            for (int i = 0; i < teamCars.Length; i++)
+            foreach (Car car in cars)
             {
-                teamCars[i].PrintCar(i == 0);
+                string printInfo = string.Format("{0,-15} {1,-15} {2,-10}", car.Brand, car.Model, car.Year);
+                Console.WriteLine(printInfo);
+            }
+        }
+        static Car ChooseCar(List<Car> cars, string modelPick)
+        {
+            if (cars.Count == 0)
+            {
+                Console.WriteLine("Der er ingen biler i databasen");
+                return null;
+            }
+            foreach (Car car in cars)
+            {
+                if (car.Model == modelPick)
+                {
+                    Console.WriteLine($"Du har valgt: {car.Brand} {car.Model}");
+                    return car;
+                }
             }
 
-
+            Console.WriteLine("Ingen bil med den model blev fundet");
+            return null;
+        }
+        static void MenuReturn()
+        {
+            Console.WriteLine("\nEnter for at se menuen..");
+            Console.ReadLine();
+            Console.Clear();
         }
     }
 }
