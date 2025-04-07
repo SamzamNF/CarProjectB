@@ -152,6 +152,8 @@ namespace BilProjektBeta
                         }
                         else
                         {
+                            Console.WriteLine($"Biler fundet i databasen: {cars.Count}\n");
+                            
                             for (int i = 0; i < cars.Count; i++)
                             {
                                 cars[i].PrintCar(i == 0);
@@ -160,49 +162,76 @@ namespace BilProjektBeta
                         MenuReturn();
                         break;
                     case 8:
-                        
-                        // userCar = objektet til min bil fra car klasse, .Trips er public propety til at get min private liste information så det kan printes. Count tæller listen.
-                        
-                        if (userCar != null)       
+
+                        // userCar = objektet til min bil fra car klasse, .Trips er public propety til at get min private liste information så det kan printes.
+                        // Case 2 skal evt ændres så den kan finde en trip på søgt dato, på alle car trips - ikke kun det valgte objekt.
+                        Console.Clear();
+                        Console.WriteLine("1. Se alle ture på den valgte bil");
+                        Console.WriteLine("2. Søg efter en tur med dato");
+                        Console.WriteLine("3. Se alle turer i databasen");
+                        Console.Write("\nIndtast svar: ");
+                        int tripChoice = Convert.ToInt32(Console.ReadLine());
+                        switch (tripChoice)
                         {
-                            Console.Write("\nTast 1 for at se alle tures priser:");
-                            Console.Write("\nTast 2 for at søge efter en tur: ");
-                            int tripChoice = Convert.ToInt32(Console.ReadLine());
-                            switch (tripChoice)
-                            {
-                                case 1:
+                            case 1:
+                                if (userCar != null)
+                                {
                                     for (int i = 0; i < userCar.Trips.Count; i++)
                                     {
                                         userCar.Trips[i].PrintTripDetails(userCar, i == 0);
                                     }
-                                    break;
-                                case 2:
-                                    Console.Write("Indtast datoen for at finde ture (dd-MM-yyyy): ");
-                                    DateTime date = Convert.ToDateTime(Console.ReadLine());
+                                    MenuReturn();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Du har ikke valgt en bil..");
+                                }
+                                break;
+                            case 2:
+                                Console.Write("Indtast datoen for at finde ture (dd-MM-yyyy): ");
+                                DateTime date = Convert.ToDateTime(Console.ReadLine());
 
-                                    List<Trip> tripsByDate = userCar.GetTripsByDate(date);
+                                List<Trip> tripsByDate = userCar.GetTripsByDate(date);
 
-                                    if (tripsByDate.Count == 0)
+                                if (tripsByDate.Count == 0)
+                                {
+                                    Console.WriteLine("Ingen ture blev fundet på denne dato");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"\nDer blev fundet {tripsByDate.Count} tur(e) på datoen.");
+
+                                    for (int i = 0; i < tripsByDate.Count; i++)
                                     {
-                                        Console.WriteLine("Ingen ture blev fundet på denne dato");
+                                        tripsByDate[i].PrintTripDetails(userCar, i == 0);
                                     }
-                                    else
-                                    {
-                                        Console.WriteLine($"\nDer blev fundet {tripsByDate.Count} tur(e) på datoen.");
+                                }
+                                MenuReturn();
+                                break;
+                            case 3:
+                                //bool first sørger for overskrift kun printes en gang
+                                bool anyTrips = false;
+                                bool first = true;
 
-                                        for (int i = 0; i < tripsByDate.Count; i++)
+                                foreach (Car car in cars)
+                                {
+                                    if (car.Trips.Count > 0)
+                                    {
+                                        anyTrips = true;
+
+                                        for (int i = 0; i < car.Trips.Count; i++)
                                         {
-                                            tripsByDate[i].PrintTripDetails(userCar, i == 0);
+                                            car.Trips[i].PrintTripDetails(car, first);
+                                            first = false;
                                         }
                                     }
-                                    Console.WriteLine("\nTryk enter for at gå tilbage til menuen..");
-                                    Console.ReadLine();
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Husk at oprette en bil og tur detaljer først..");
+                                }
+                                if (!anyTrips)
+                                {
+                                    Console.WriteLine("Ingen ture blev fundet");
+                                }
+                                MenuReturn();
+                                break;
                         }
                         break;
                     case 9:
@@ -212,7 +241,7 @@ namespace BilProjektBeta
                         Console.WriteLine("Ugyldt valg, prøv igen");
                         break;
                 }
-            } while (choice != 8);
+            } while (choice != 9);
 
         }
         
@@ -224,7 +253,7 @@ namespace BilProjektBeta
             {
                 try
                 {
-                    Console.WriteLine("\n***** OPRET NY BIL *****");
+                    Console.WriteLine("\n|---- OPRET NY BIL ----|");
                     Console.Write("Indtast bilens mærke: ");
                     string brand = Console.ReadLine();
                     Console.Write("Indtast bilens model: ");
