@@ -14,3 +14,5 @@ Audi;A4;43854;Diesel;16,8;2020
 BMW;3 Series;53005;Diesel;15,4;2019
 Skoda;Octavia;112000;Benzin;19;2015
 Kia;Ceed;41532;Hybrid;21;2020
+Ford;Fiesta;215969;Benzin;19,5;2014
+130;11-03-2025;08:43;10:27

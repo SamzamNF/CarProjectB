@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using CarProjektBeta;
 
 namespace BilProjektBeta
@@ -37,12 +38,16 @@ namespace BilProjektBeta
                 switch (choice)
                 {
                     case 1:
+                        //Tilføj bil til database
+
                         Console.Clear();
                         userCar = CreateCar(datahandler);
 
                         MenuReturn();
                         break;
                     case 2:
+                        //Slet bil fra database
+
                         Console.Clear();
                         if (cars.Count == 0)
                         {
@@ -64,6 +69,8 @@ namespace BilProjektBeta
                         MenuReturn();
                         break;
                     case 3:
+                        //Vælg bil at sætte objektet til
+
                         Console.Clear();
                         CarList();
                         Console.Write("Vælg modelnavn for at bruge bilen: ");
@@ -74,10 +81,12 @@ namespace BilProjektBeta
                         MenuReturn();
                         break;
                     case 4:
+                        //Tænd eller sluk motor
+
                         Console.Clear();
                         if (userCar != null)
                         {
-                            Console.Write("\nVil du tænde eller slukke moteren? ");
+                            Console.Write("\nVil du tænde eller slukke motoren? ");
                             string engineChoice = Console.ReadLine().ToLower();
                             if (engineChoice == "tænd" || engineChoice == "tænde")
                             {
@@ -100,7 +109,8 @@ namespace BilProjektBeta
                         MenuReturn();
                         break;                 
                     case 5:
-                        //Tilføj tur til bil                        
+                        //Tilføj tur til bil
+                        
                         Console.Clear();
                         if (userCar != null)
                         {
@@ -129,6 +139,8 @@ namespace BilProjektBeta
                         MenuReturn();
                         break;
                     case 6:
+                        //Tjek om den valgte bil er palindrom
+                        
                         Console.Clear();
                         if (userCar != null)
                         {
@@ -145,6 +157,8 @@ namespace BilProjektBeta
                         MenuReturn();
                         break;
                     case 7:
+                        //Print alle biler i databasen
+
                         Console.Clear();
                         if (cars.Count == 0)
                         {
@@ -152,7 +166,9 @@ namespace BilProjektBeta
                         }
                         else
                         {
+                            Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"Biler fundet i databasen: {cars.Count}\n");
+                            Console.ResetColor();
                             
                             for (int i = 0; i < cars.Count; i++)
                             {
@@ -167,27 +183,30 @@ namespace BilProjektBeta
                         // Case 2 skal evt ændres så den kan finde en trip på søgt dato, på alle car trips - ikke kun det valgte objekt.
                         Console.Clear();
                         Console.WriteLine("1. Se alle ture på den valgte bil");
-                        Console.WriteLine("2. Søg efter en tur med dato");
-                        Console.WriteLine("3. Se alle turer i databasen");
+                        Console.WriteLine("2. Søg efter en tur med dato på valgt bil");
+                        Console.WriteLine("3. Søg efter alle ture i databasen");
+                        Console.WriteLine("4. Søg efter alle ture på en bil");
                         Console.Write("\nIndtast svar: ");
                         int tripChoice = Convert.ToInt32(Console.ReadLine());
                         switch (tripChoice)
                         {
                             case 1:
+                                Console.Clear();
                                 if (userCar != null)
                                 {
                                     for (int i = 0; i < userCar.Trips.Count; i++)
                                     {
                                         userCar.Trips[i].PrintTripDetails(userCar, i == 0);
-                                    }
-                                    MenuReturn();
+                                    }                                   
                                 }
                                 else
                                 {
                                     Console.WriteLine("Du har ikke valgt en bil..");
                                 }
+                                MenuReturn();
                                 break;
                             case 2:
+                                Console.Clear();
                                 Console.Write("Indtast datoen for at finde ture (dd-MM-yyyy): ");
                                 DateTime date = Convert.ToDateTime(Console.ReadLine());
 
@@ -210,6 +229,7 @@ namespace BilProjektBeta
                                 break;
                             case 3:
                                 //bool first sørger for overskrift kun printes en gang
+                                Console.Clear();
                                 bool anyTrips = false;
                                 bool first = true;
 
@@ -232,6 +252,21 @@ namespace BilProjektBeta
                                 }
                                 MenuReturn();
                                 break;
+                            case 4:
+                                Console.Clear();
+                                CarList();
+                                Console.Write("\nVælg hvilken model du vil se ture på: ");
+                                string modelChoice = Console.ReadLine();
+                                Console.Clear();
+                                
+                                Car carTrips = ChooseCar(cars, modelChoice);
+                                
+                                for (int i = 0; i < carTrips.Trips.Count; i++)
+                                {
+                                    carTrips.Trips[i].PrintTripDetails(carTrips, i == 0);
+                                }
+                                MenuReturn();
+                                break;
                         }
                         break;
                     case 9:
@@ -245,6 +280,7 @@ namespace BilProjektBeta
 
         }
         
+        //Metode til at lave et car objekt
         static Car CreateCar(Datahandler datahandler)
         {
 
@@ -296,6 +332,7 @@ namespace BilProjektBeta
             return newCar;
         }
         
+        //Metode til at lave en trip
         static Trip CreateTrip()
         {
             Console.Write("\nIndtast antal kilometer for turen: ");
@@ -322,7 +359,9 @@ namespace BilProjektBeta
 
             return kilometerStr == reverseStr;
         }
-       static void CarList()
+       
+        //Display en simpel liste af cars fra listen.
+        static void CarList()
         {
             Console.WriteLine("\nFølgende biler findes i databasen");
             string infoHeader = string.Format("{0,-15} {1,-15} {2,-10}", "Mærke", "Model", "Årgang");
@@ -335,28 +374,57 @@ namespace BilProjektBeta
                 Console.WriteLine(printInfo);
             }
         }
+
+        //Søg efter bil i liste metode. Behøver i princip kun foreach loopet til det.
         static Car ChooseCar(List<Car> cars, string modelPick)
         {
-            if (cars.Count == 0)
+            Car searchCar = null;
+            while (searchCar == null)
             {
-                Console.WriteLine("Der er ingen biler i databasen");
-                return null;
-            }
-            foreach (Car car in cars)
-            {
-                if (car.Model == modelPick)
+                try
                 {
-                    Console.WriteLine($"Du har valgt: {car.Brand} {car.Model}");
-                    return car;
+                    if (cars.Count == 0)
+                    {
+                        throw new Exception("Der er ingen biler i databasen");
+                    }
+
+                    foreach (Car car in cars)
+                    {
+                        if (car.Model == modelPick)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Du har valgt: {car.Brand} {car.Model}\n");
+                            Console.ResetColor();
+                            searchCar = car;
+                            break;
+                        }
+                    }
+
+                    if (searchCar == null)
+                    {
+                        Console.Clear();
+                        throw new Exception("Ingen bil med den model blev fundet");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Prøv venligst igen.");
+                    CarList();
+                    Console.Write("\nVælg hvilken model du vil se ture på: ");
+                    modelPick = Console.ReadLine();
+                    Console.Clear();
                 }
             }
-
-            Console.WriteLine("Ingen bil med den model blev fundet");
-            return null;
+            return searchCar;
         }
+
+        //Metode til at returnere til menuen på en clean måde
         static void MenuReturn()
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\nEnter for at se menuen..");
+            Console.ResetColor();
             Console.ReadLine();
             Console.Clear();
         }

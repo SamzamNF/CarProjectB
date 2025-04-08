@@ -151,19 +151,31 @@ namespace CarProjektBeta
         }      
         public void PrintCar(bool First = false)
         {
-            string infoHeader = String.Format("| {0,-13} | {1,-10} | {2,-10} | {3,-10} | {4,-10} |", "Bilmærke", "Model", "Odometer", "Km/l", "Årgang");
-            string line = String.Format("|---------------|------------|------------|------------|------------|");
+            string infoHeader = String.Format("{0,-13} {1,-13} {2,-13} {3,-13} {4,-13}", "Bilmærke", "Model", "Odometer", "Km/l", "Årgang");
+            string line = new string('-', 63);
 
             if (First)
             {
 
-                Console.WriteLine(line);
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine(infoHeader);
+                Console.ResetColor();
                 Console.WriteLine(line);
+                
             }
-            string carDetails = string.Format("| {0,-13} | {1,-10} | {2,-10} | {3,-10} | {4,-10} |", Brand, Model, Odometer, KmPerLiter, Year);
+            if (Odometer > 200000)
+                Console.ForegroundColor = ConsoleColor.Red;
+            else if (Odometer > 100000)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            else
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+            string carDetails = string.Format("{0,-13} {1,-13} {2,-13} {3,-13} {4,-13}", Brand, Model, Odometer, KmPerLiter, Year);
             Console.WriteLine(carDetails);
-            Console.WriteLine(line);
+
+            Console.ResetColor();
+
+
         }
         public List<Trip> GetTripsByDate(DateTime date)
         {

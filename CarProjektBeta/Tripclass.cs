@@ -62,19 +62,31 @@ namespace CarProjektBeta
 
         public void PrintTripDetails(Car car, bool first = false)
         {
-            string infoHeader = String.Format("| {0,-10} | {1,-19} | {2,-19} | {3,-12} | {4,-15} | {5,-10} |", "Distance", "Starttid", "Sluttid", "Varighed", "Brændstof", "Pris");
-            string line = String.Format("|------------|---------------------|---------------------|--------------|-----------------|------------|");
+            string infoHeader = String.Format("{0,-10} {1,-25} {2,-25} {3,-12} {4,-15} {5,-10}", "Distance", "Starttid", "Sluttid", "Varighed", "Brændstof", "Pris");
+            string line = new string('-', 100);
 
             if (first)
             {
-                Console.WriteLine(line);
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine(infoHeader);
+                Console.ResetColor();
                 Console.WriteLine(line);
+
             }
 
-            string tripDetails = String.Format("| {0,-10} | {1,-19} | {2,-19} | {3,-12} | {4,-15:F2} | {5,-10:F2} | ", Distance, StartTime, EndTime, CalculateDuration().ToString(@"hh\:mm\:ss"), FuelConsumed(car), CalculateTripPrice(car));
+            if (CalculateDuration() > TimeSpan.FromHours(7))
+                Console.ForegroundColor = ConsoleColor.Red;
+            else if (CalculateDuration() > TimeSpan.FromHours(5))
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+            else if (CalculateDuration() > TimeSpan.FromHours(3))
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            else
+                Console.ForegroundColor = ConsoleColor.Gray;
+                            
+            string tripDetails = String.Format("{0,-10} {1,-25} {2,-25} {3,-12} {4,-15:F2} {5,-10:F2}", Distance, StartTime, EndTime, CalculateDuration().ToString(@"hh\:mm\:ss"), FuelConsumed(car), CalculateTripPrice(car));
             Console.WriteLine(tripDetails);
-            Console.WriteLine(line);
+
+            Console.ResetColor();
         }
 
         //Metoder til filer
