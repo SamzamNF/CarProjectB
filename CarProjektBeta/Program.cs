@@ -29,7 +29,7 @@ namespace BilProjektBeta
         static void PrintMainMenu()
         {
             Console.Clear();
-            
+            PrintColoredMenu();
 
             PrintColoredOption(1, "Tilføj bil");
             PrintColoredOption(2, "Slet bil");
@@ -189,6 +189,8 @@ namespace BilProjektBeta
         static void PrintTripDetails()
         {
             Console.Clear();
+            PrintColoredMenu();
+            
             PrintColoredOption(1, "Se ture på den valgte bil");
             PrintColoredOption(2, "Søg tur med dato");
             PrintColoredOption(3, "Søg efter alle ture");
@@ -320,12 +322,16 @@ namespace BilProjektBeta
 
             Console.ResetColor();
         }
-        static void PrintColoredText(string text)
+        static void PrintColoredMenu()
         {
-            
-            Console.BackgroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(text);           
+
+            Console.WriteLine("╔══════════════════════════════════════════════╗");
+            Console.Write("║              ");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("Vælg en mulighed:");
             Console.ResetColor();
+            Console.WriteLine("               ║");
+            Console.WriteLine("╚══════════════════════════════════════════════╝");
 
         }
 
