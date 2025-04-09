@@ -13,31 +13,31 @@ namespace BilProjektBeta
         static void Main(string[] args)
         {
 
-            cars = datahandler.LoadCarsAndTrips();
-            int choice;
+            cars = datahandler.LoadCarsAndTrips();           
             Car userCar = null;
             Trip newTrip = null;
+
+            ConsoleKeyInfo choice;
             do
             {
                 Console.WriteLine("\nVælg funktion: ");
-                Console.WriteLine("1. Tilføj bil");
-                Console.WriteLine("2. Slet bil");
-                Console.WriteLine("3. Vælg bil");
-                Console.WriteLine("4. Tænd eller sluk moteren");
-                Console.WriteLine("5. Kør en tur");
-                Console.WriteLine("6. Tjek om odometeret er et palindrom");
-                Console.WriteLine("7. Print bilernes oplysninger");
-                Console.WriteLine("8. Print tur pris");
-                Console.WriteLine("9. Afslut programmet");
-                
-                Console.Write("Tast dit svar: ");
+                PrintColoredOption(1, "Tilføj bil");
+                PrintColoredOption(2, "Slet bil");
+                PrintColoredOption(3, "Vælg bil");
+                PrintColoredOption(4, "Tænd eller sluk moteren");
+                PrintColoredOption(5, "Kør en tur");
+                PrintColoredOption(6, "Tjek om odometeret er et palindrom");
+                PrintColoredOption(7, "Print bilernes oplysninger");
+                PrintColoredOption(8, "Print tur pris");
+                PrintColoredOption(9, "Afslut programmet");
 
 
-                choice = Convert.ToInt32(Console.ReadLine());
 
-                switch (choice)
+                choice = Console.ReadKey(true);
+
+                switch (choice.KeyChar)
                 {
-                    case 1:
+                    case '1':
                         //Tilføj bil til database
 
                         Console.Clear();
@@ -45,7 +45,7 @@ namespace BilProjektBeta
 
                         MenuReturn();
                         break;
-                    case 2:
+                    case '2':
                         //Slet bil fra database
 
                         Console.Clear();
@@ -68,7 +68,7 @@ namespace BilProjektBeta
                         
                         MenuReturn();
                         break;
-                    case 3:
+                    case '3':
                         //Vælg bil at sætte objektet til
 
                         Console.Clear();
@@ -80,7 +80,7 @@ namespace BilProjektBeta
 
                         MenuReturn();
                         break;
-                    case 4:
+                    case '4':
                         //Tænd eller sluk motor
 
                         Console.Clear();
@@ -108,7 +108,7 @@ namespace BilProjektBeta
 
                         MenuReturn();
                         break;                 
-                    case 5:
+                    case '5':
                         //Tilføj tur til bil
                         
                         Console.Clear();
@@ -138,7 +138,7 @@ namespace BilProjektBeta
 
                         MenuReturn();
                         break;
-                    case 6:
+                    case '6':
                         //Tjek om den valgte bil er palindrom
                         
                         Console.Clear();
@@ -156,7 +156,7 @@ namespace BilProjektBeta
 
                         MenuReturn();
                         break;
-                    case 7:
+                    case '7':
                         //Print alle biler i databasen
 
                         Console.Clear();
@@ -177,20 +177,20 @@ namespace BilProjektBeta
                         }
                         MenuReturn();
                         break;
-                    case 8:
+                    case '8':
 
                         // userCar = objektet til min bil fra car klasse, .Trips er public propety til at get min private liste information så det kan printes.
                         // Case 2 skal evt ændres så den kan finde en trip på søgt dato, på alle car trips - ikke kun det valgte objekt.
                         Console.Clear();
-                        Console.WriteLine("1. Se alle ture på den valgte bil");
-                        Console.WriteLine("2. Søg efter en tur med dato på valgt bil");
-                        Console.WriteLine("3. Søg efter alle ture i databasen");
-                        Console.WriteLine("4. Søg efter alle ture på en bil");
-                        Console.Write("\nIndtast svar: ");
-                        int tripChoice = Convert.ToInt32(Console.ReadLine());
-                        switch (tripChoice)
+                        PrintColoredOption(1, "Se ture på den valgte bil");
+                        PrintColoredOption(2, "Søg tur med dato");
+                        PrintColoredOption(3, "Søg efter alle ture");
+                        PrintColoredOption(4, "Søg efter alle ture på en bil");
+                        ConsoleKeyInfo tripChoice;
+                        tripChoice = Console.ReadKey();
+                        switch (tripChoice.KeyChar)
                         {
-                            case 1:
+                            case '1':
                                 Console.Clear();
                                 if (userCar != null)
                                 {
@@ -205,7 +205,7 @@ namespace BilProjektBeta
                                 }
                                 MenuReturn();
                                 break;
-                            case 2:
+                            case '2':
                                 Console.Clear();
                                 Console.Write("Indtast datoen for at finde ture (dd-MM-yyyy): ");
                                 DateTime date = Convert.ToDateTime(Console.ReadLine());
@@ -227,7 +227,7 @@ namespace BilProjektBeta
                                 }
                                 MenuReturn();
                                 break;
-                            case 3:
+                            case '3':
                                 //bool first sørger for overskrift kun printes en gang
                                 Console.Clear();
                                 bool anyTrips = false;
@@ -252,7 +252,7 @@ namespace BilProjektBeta
                                 }
                                 MenuReturn();
                                 break;
-                            case 4:
+                            case '4':
                                 Console.Clear();
                                 CarList();
                                 Console.Write("\nVælg hvilken model du vil se ture på: ");
@@ -269,14 +269,14 @@ namespace BilProjektBeta
                                 break;
                         }
                         break;
-                    case 9:
+                    case '9':
                         Console.WriteLine("Afslutter programmet...");
                         break;
                     default:
                         Console.WriteLine("Ugyldt valg, prøv igen");
                         break;
                 }
-            } while (choice != 9);
+            } while (choice.KeyChar != '9');
 
         }
         
@@ -427,6 +427,18 @@ namespace BilProjektBeta
             Console.ResetColor();
             Console.ReadLine();
             Console.Clear();
+        }
+
+        //Metode til menu UI
+        static void PrintColoredOption(int option, string text)
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write($"[{option}] ");  // Brackets rundt om nummeret
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(text);
+
+            Console.ResetColor();
         }
     }
 }
