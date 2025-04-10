@@ -23,10 +23,37 @@ namespace BilProjektBeta
                 PrintMainMenu();
                 choice = Console.ReadKey(true);
                 HandleMenuChoice(choice.KeyChar);
-            } while (choice.KeyChar != '9');
+            } while (choice.KeyChar != '6');
         }
 
         static void PrintMainMenu()
+        {
+            Console.Clear();
+            PrintColoredMenu();
+
+            PrintColoredOption(1, "Adminstrer bil");
+            PrintColoredOption(2, "Kør en tur");
+            PrintColoredOption(3, "Tjek om odometeret er et palindrom");
+            PrintColoredOption(4, "Print bilernes oplysninger");
+            PrintColoredOption(5, "Print tur pris");
+            PrintColoredOption(6, "Afslut programmet");
+        }
+
+        static void HandleMenuChoice(char choice)
+        {
+            switch (choice)
+            {
+                case '1': CarOptions(); break;
+                case '2': DriveCar(); break;
+                case '3': CheckOdometerPalindrome(); break;
+                case '4': PrintCarDetails(); break;
+                case '5': PrintTripDetails(); break;
+                case '6': Console.WriteLine("Afslutter programmet..."); break;
+                default: Console.WriteLine("Ugyldigt valg, prøv igen"); break;
+            }
+        }
+
+        static void CarOptions()
         {
             Console.Clear();
             PrintColoredMenu();
@@ -35,27 +62,19 @@ namespace BilProjektBeta
             PrintColoredOption(2, "Slet bil");
             PrintColoredOption(3, "Vælg bil");
             PrintColoredOption(4, "Tænd eller sluk motoren");
-            PrintColoredOption(5, "Kør en tur");
-            PrintColoredOption(6, "Tjek om odometeret er et palindrom");
-            PrintColoredOption(7, "Print bilernes oplysninger");
-            PrintColoredOption(8, "Print tur pris");
-            PrintColoredOption(9, "Afslut programmet");
-        }
-
-        static void HandleMenuChoice(char choice)
-        {
-            switch (choice)
+            PrintColoredOption(5, "Gå tilbage");
+            ConsoleKeyInfo tripChoice;
+            tripChoice = Console.ReadKey();
+            switch (tripChoice.KeyChar)
             {
                 case '1': AddCar(); break;
                 case '2': DeleteCar(); break;
                 case '3': SelectCar(); break;
-                case '4': ToggleEngine(); break;
-                case '5': DriveCar(); break;
-                case '6': CheckOdometerPalindrome(); break;
-                case '7': PrintCarDetails(); break;
-                case '8': PrintTripDetails(); break;
-                case '9': Console.WriteLine("Afslutter programmet..."); break;
-                default: Console.WriteLine("Ugyldigt valg, prøv igen"); break;
+                case '4':
+                    ToggleEngine();
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -127,20 +146,23 @@ namespace BilProjektBeta
             if (userCar != null)
             {
                 Trip newTrip = CreateTrip();
-                userCar.Drive(newTrip);
-                Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {userCar.Odometer}km");
-
-                // Opdaterer den valgte bil i listen
-                for (int i = 0; i < cars.Count; i++)
+                if (newTrip.CalculateTripPrice(userCar) > 0)
                 {
-                    if (cars[i].Model == userCar.Model)
-                    {
-                        cars[i] = userCar;
-                        break;
-                    }
-                }
+                    userCar.Drive(newTrip);
+                    Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {userCar.Odometer}km");
 
-                datahandler.AddCarsAndTrips(cars); // Gemmer opdaterede data i filen
+                    // Opdaterer den valgte bil i listen
+                    for (int i = 0; i < cars.Count; i++)
+                    {
+                        if (cars[i].Model == userCar.Model)
+                        {
+                            cars[i] = userCar;
+                            break;
+                        }
+                    }
+
+                    datahandler.AddCarsAndTrips(cars); // Gemmer opdaterede data i filen
+                }                
             }
             else
             {

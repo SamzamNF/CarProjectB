@@ -48,7 +48,20 @@ namespace CarProjektBeta
         }
         public double CalculateTripPrice(Car car)
         {
-            return (Distance / car.KmPerLiter) * car.FuelPrice;
+            try
+            {
+                if (car.KmPerLiter == 0)
+                {
+                    throw new DivideByZeroException();
+                }
+
+                return (Distance / car.KmPerLiter) * car.FuelPrice;
+            }
+            catch (DivideByZeroException DBZE)
+            {
+                Console.WriteLine("Km/l kan ikke være 0, og prisen af din tur kan derfor ikke udregnes..");
+                return 0;
+            }
         }
         public TimeSpan CalculateDuration()
         {

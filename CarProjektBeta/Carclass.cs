@@ -139,14 +139,25 @@ namespace CarProjektBeta
         }
         public void Drive(Trip newTrip)
         {
-            if (_isEngineOn)
+            try
             {
-                _kilometer += newTrip.Distance;
-                _trips.Add(newTrip);
+                if (newTrip.Distance <= 0)
+                {
+                    throw new InvalidDistanceException("Kørsel ikke gennemført.");
+                }
+                if (_isEngineOn)
+                {
+                    _kilometer += newTrip.Distance;
+                    _trips.Add(newTrip);
+                }
+                else
+                {
+                    Console.WriteLine("Du skal starte motoren først..");
+                }
             }
-            else
+            catch (InvalidDistanceException ex)
             {
-                Console.WriteLine("Du skal starte motoren først..");
+                Console.WriteLine($"Fejl: {ex.Message}");
             }
         }      
         public void PrintCar(bool First = false)

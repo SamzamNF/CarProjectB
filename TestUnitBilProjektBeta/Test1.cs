@@ -86,5 +86,38 @@ namespace TestUnitBilProjektBeta
             Console.WriteLine($"Metodetjek: {priceCheck:F2}");
             Console.WriteLine($"Manueltudregnet: {expectedPrice:F2}");
         }
+        [TestMethod]
+        public void TestCatchTripPrice()
+        {
+            // Arrange
+            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 0);
+
+            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1));
+            tripTest.Distance = 10;
+
+            // Act
+            double expectedResult = tripTest.CalculateTripPrice(carTest);
+
+            //Assert
+            Assert.AreEqual(0, expectedResult);
+        }
+
+        [TestMethod]
+        public void TestDriveMethodException()
+        {
+            // Arrange
+            Car carTest = new Car("Toyota", "Corolla", 2020, 500, FuelType.Benzin, 18);
+            carTest.ToggleEngine(true);
+
+            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1));
+            tripTest.Distance = -250;
+
+            // Act
+            carTest.Drive(tripTest);
+
+            // Assert
+            Assert.AreEqual(500, carTest.Odometer);            
+        }
+
     }
 }

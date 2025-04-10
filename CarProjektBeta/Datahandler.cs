@@ -13,58 +13,83 @@ namespace CarProjektBeta
         //Metoder til Trip klassen
         public void AddCarsAndTrips(List<Car> cars)
         {
-            using (StreamWriter sw = new StreamWriter(FilePath, false))
+            StreamWriter sw = null;
+            try
             {
-                foreach (Car car in cars)
+                using (sw = new StreamWriter(FilePath, false))
                 {
-                    sw.WriteLine(car.ToString());
-                    foreach (Trip trip in car.Trips)
+                    foreach (Car car in cars)
                     {
-                        sw.WriteLine(trip.ToString());
+                        sw.WriteLine(car.ToString());
+                        foreach (Trip trip in car.Trips)
+                        {
+                            sw.WriteLine(trip.ToString());
+                        }
                     }
                 }
             }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Fejl under skrivning: {ex.Message}");
+            }
+            /* Denne del er ikke nødvendig, da "using" allerede lukker filen ordenligt.
+            finally
+            {
+                sw?.Close();
+            }*/
         }
+
         public List<Car> LoadCarsAndTrips()
         {
-            if (!File.Exists(FilePath)) return new List<Car>();
-
             List<Car> cars = new List<Car>();
             Car currentCar = null;
 
-            using (StreamReader sr = new StreamReader(FilePath))
+            try
             {
-                string line;
-                while ((line = sr.ReadLine()) != null)
+                using (StreamReader sr = new StreamReader(FilePath))
                 {
-                    // Tjek om linjen repræsenterer en bil (6 felter)
-                    if (line.Split(';').Length == 6)
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
                     {
-                        // Hvis der allerede er en currentCar, tilføj den til listen først
-                        if (currentCar != null)
+                        // Tjek om linjen repræsenterer en bil (6 felter)
+                        if (line.Split(';').Length == 6)
                         {
-                            cars.Add(currentCar);
+                            // Hvis der allerede er en currentCar, tilføj den til listen først
+                            if (currentCar != null)
+                            {
+                                cars.Add(currentCar);
+                            }
+                            // Opret ny bil
+                            currentCar = Car.FromString(line);
                         }
-                        // Opret ny bil
-                        currentCar = Car.FromString(line);
+                        else
+                        {
+                            // Hvis det er en tur, og der er en currentCar, tilføj turen
+                            Trip trip = Trip.FromString(line);
+                            if (trip != null && currentCar != null)
+                            {
+                                currentCar.Trips.Add(trip);
+                            }
+                        }
                     }
-                    else
+                    // Tilføj den sidste bil, hvis der er en
+                    if (currentCar != null)
                     {
-                        // Hvis det er en tur, og der er en currentCar, tilføj turen
-                        Trip trip = Trip.FromString(line);
-                        if (trip != null && currentCar != null)
-                        {
-                            currentCar.Trips.Add(trip);
-                        }
+                        cars.Add(currentCar);
                     }
                 }
-                // Tilføj den sidste bil, hvis der er en
-                if (currentCar != null)
-                {
-                    cars.Add(currentCar);
-                }
+                
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Filen blev ikke fundet, opretter en tom liste..");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Der opstod en formatfejl i læsningen af filerne, sørg for at dataen er i den rigtige format");
             }
             return cars;
+
         }
 
         public void DeleteCarByModel(string modelName)
