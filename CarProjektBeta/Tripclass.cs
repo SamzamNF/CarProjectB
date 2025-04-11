@@ -113,9 +113,16 @@ namespace CarProjektBeta
             if (parts.Length != 4) return null;
 
             double distance = double.Parse(parts[0]);
-            DateTime tripDate = DateTime.ParseExact(parts[1], "dd/MM/yyyy", null);
+            
+            DateTime tripDate = DateTime.ParseExact(parts[1], "dd-MM-yyyy", null);
+
+            // Kombiner datoen fra tripDate med tidspunkterne
             DateTime startTime = DateTime.ParseExact(parts[2], "HH:mm", null);
+            startTime = tripDate.Date + startTime.TimeOfDay; // Kombiner dato og tid
+
             DateTime endTime = DateTime.ParseExact(parts[3], "HH:mm", null);
+            endTime = tripDate.Date + endTime.TimeOfDay; // Kombiner dato og tid
+
 
             return new Trip(distance, tripDate, startTime, endTime);
         }

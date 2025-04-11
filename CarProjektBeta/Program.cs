@@ -63,6 +63,7 @@ namespace BilProjektBeta
             PrintColoredOption(3, "Vælg bil");
             PrintColoredOption(4, "Tænd eller sluk motoren");
             PrintColoredOption(5, "Gå tilbage");
+            
             ConsoleKeyInfo tripChoice;
             tripChoice = Console.ReadKey();
             switch (tripChoice.KeyChar)
@@ -70,11 +71,8 @@ namespace BilProjektBeta
                 case '1': AddCar(); break;
                 case '2': DeleteCar(); break;
                 case '3': SelectCar(); break;
-                case '4':
-                    ToggleEngine();
-                    break;
-                default:
-                    break;
+                case '4': ToggleEngine(); break;
+                default: break;
             }
         }
 
@@ -146,27 +144,24 @@ namespace BilProjektBeta
             if (userCar != null)
             {
                 Trip newTrip = CreateTrip();
-                if (newTrip.CalculateTripPrice(userCar) > 0)
+                if (newTrip != null)
                 {
-                    userCar.Drive(newTrip);
-                    Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {userCar.Odometer}km");
-
-                    // Opdaterer den valgte bil i listen
-                    for (int i = 0; i < cars.Count; i++)
+                    if (newTrip.CalculateTripPrice(userCar) > 0)
                     {
-                        if (cars[i].Model == userCar.Model)
-                        {
-                            cars[i] = userCar;
-                            break;
-                        }
-                    }
+                        userCar.Drive(newTrip);
+                        Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {userCar.Odometer}km");
 
-                    datahandler.AddCarsAndTrips(cars); // Gemmer opdaterede data i filen
-                }                
+                        // Opdaterer bilen i listen, hvis modelnavnet matcher, opdateres den gamle bil i listen med userCar
+                        cars = cars.Select(car => car.Model == userCar.Model ? userCar : car).ToList();
+
+                        datahandler.AddCarsAndTrips(cars); // Gemmer opdaterede data i filen
+                    }
+                }
+                              
             }
             else
             {
-                Console.WriteLine("Opret en bil i menu 1 først..");
+                Console.WriteLine("Vælg en bil i 'adminstrer bil' først..");
             }
             MenuReturn();
         }
@@ -411,21 +406,37 @@ namespace BilProjektBeta
         //Metode til at lave en tur
         static Trip CreateTrip()
         {
-            Console.Write("\nIndtast antal kilometer for turen: ");
-            double distance = Convert.ToDouble(Console.ReadLine());
+            try
+            {
+                Console.Write("\nIndtast antal kilometer for turen: ");
+                double distance = Convert.ToDouble(Console.ReadLine());
 
-            Console.Write("Indtast dato for turen: (dd/mm/yyyy): ");
-            DateTime tripDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+                Console.Write("Indtast dato for turen (dd/MM/yyyy): ");
+                DateTime tripDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
 
-            Console.Write("Indtast starttidspunkt (HH:mm): ");
-            DateTime startTime = DateTime.ParseExact(Console.ReadLine(), "HH:mm", null);
-            startTime = tripDate.Date + startTime.TimeOfDay; // Kombiner dato og tid
+                Console.Write("Indtast starttidspunkt (HH:mm): ");
+                DateTime startTime = DateTime.ParseExact(Console.ReadLine(), "HH:mm", null);
+                startTime = tripDate.Date + startTime.TimeOfDay; // Kombiner dato og tid
 
-            Console.Write("Indtast sluttidspunkt (HH:mm): ");
-            DateTime endTime = DateTime.ParseExact(Console.ReadLine(), "HH:mm", null);
-            endTime = tripDate.Date + endTime.TimeOfDay; // Kombiner dato og tid
+                Console.Write("Indtast sluttidspunkt (HH:mm): ");
+                DateTime endTime = DateTime.ParseExact(Console.ReadLine(), "HH:mm", null);
+                endTime = tripDate.Date + endTime.TimeOfDay; // Kombiner dato og tid
 
-            return new Trip(distance, tripDate, startTime, endTime);
+                return new Trip(distance, tripDate, startTime, endTime);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Fejl: Forkert format på input. Trip ikke oprettet.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine("Fejl: Du har ikke indtastet en værdi. Trip ikke oprettet");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ukendt fejl: {ex.Message}");
+            }
+            return null;
         }
 
         static bool Palindrom(double odometer)

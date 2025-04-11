@@ -51,6 +51,8 @@ namespace CarProjektBeta
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
+                        Console.WriteLine($"Læsning af linje: {line}");  // Log linjen der læses
+
                         // Tjek om linjen repræsenterer en bil (6 felter)
                         if (line.Split(';').Length == 6)
                         {
@@ -82,7 +84,7 @@ namespace CarProjektBeta
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("Filen blev ikke fundet, opretter en tom liste..");
+                Console.WriteLine("Filen blev ikke fundet, så der returneres en tom liste af biler.");
             }
             catch (FormatException)
             {

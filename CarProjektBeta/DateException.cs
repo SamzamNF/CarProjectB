@@ -14,7 +14,7 @@ namespace CarProjektBeta
         }
 
         public InvalidDistanceException(string message, Exception inner)
-            :base (message, inner)
+            : base(message, inner)
         {
         }
     }

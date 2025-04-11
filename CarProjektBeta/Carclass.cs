@@ -179,7 +179,7 @@ namespace CarProjektBeta
             else if (Odometer > 100000)
                 Console.ForegroundColor = ConsoleColor.Yellow;
             else
-                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = ConsoleColor.White;
 
             string carDetails = string.Format("{0,-13} {1,-13} {2,-13} {3,-13} {4,-13}", Brand, Model, Odometer, KmPerLiter, Year);
             Console.WriteLine(carDetails);
