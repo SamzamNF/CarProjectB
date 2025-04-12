@@ -71,7 +71,7 @@ namespace BilProjektBeta
                 case '1': AddCar(); break;
                 case '2': DeleteCar(); break;
                 case '3': SelectCar(); break;
-                case '4': ToggleEngine(); break;
+                case '4': Engine(); break;
                 default: break;
             }
         }
@@ -111,7 +111,7 @@ namespace BilProjektBeta
             MenuReturn();
         }
 
-        static void ToggleEngine()
+        static void Engine()
         {
             Console.Clear();
             if (userCar != null)
@@ -450,16 +450,24 @@ namespace BilProjektBeta
         //Display en simpel liste af cars fra listen.
         static void CarList()
         {
-            Console.WriteLine("\nFølgende biler findes i databasen");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Følgende biler findes i databasen\n");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
             string infoHeader = string.Format("{0,-15} {1,-15} {2,-10}", "Mærke", "Model", "Årgang");
             Console.WriteLine(infoHeader);
+
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(new string('-', 45));
 
+            Console.ForegroundColor = ConsoleColor.White;
             foreach (Car car in cars)
             {
                 string printInfo = string.Format("{0,-15} {1,-15} {2,-10}", car.Brand, car.Model, car.Year);
                 Console.WriteLine(printInfo);
             }
+            Console.ResetColor();
         }
 
         //Søg efter bil i liste metode. Behøver i princip kun foreach loopet til det.
