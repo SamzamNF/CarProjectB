@@ -23,9 +23,10 @@ namespace CarProjektBeta
         private double _fuelPrice;
         private bool _isEngineOn;
         private List<Trip> _trips;
+        private string _licenseplate;
 
         // Konstruktør
-        public Car(string brand, string model, int year, double odometer, FuelType fuelSource, double kmPerLiter)
+        public Car(string brand, string model, int year, double odometer, FuelType fuelSource, double kmPerLiter, string licenseplate)
         {
             _brand = brand;
             _model = model;
@@ -34,7 +35,8 @@ namespace CarProjektBeta
             FuelSource = fuelSource;
             _kmPerLiter = kmPerLiter;
             _isEngineOn = false;
-            _trips = new List<Trip>();           
+            _trips = new List<Trip>();
+            _licenseplate = licenseplate;
         }
 
         // Manuelt implementeret property
@@ -96,7 +98,7 @@ namespace CarProjektBeta
                 }
                 else
                 {
-                    Console.WriteLine("Kilometer kan ikke være negativt i din bil..");
+                    throw new ArgumentException("Kilometerstand kan ikke være negativ");
                 }
             }
         }
@@ -111,7 +113,7 @@ namespace CarProjektBeta
                 }
                 else
                 {
-                    Console.WriteLine("kmPerLiter skal være positivt");
+                    throw new ArgumentException("Km/l skal være et positivt tal");
                 }
             }
         }
@@ -122,6 +124,21 @@ namespace CarProjektBeta
         public List<Trip> Trips
         {
             get { return _trips; }
+        }
+        public string LicensePlate
+        {
+            get { return _licenseplate; }
+            set
+            {
+                if (value.Length == 7)
+                {
+                    _licenseplate = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Nummerpladen skal have præcis 7 tegn");
+                }
+            }
         }
         // Metoder
 
@@ -139,31 +156,21 @@ namespace CarProjektBeta
         }
         public void Drive(Trip newTrip)
         {
-            try
+            if (_isEngineOn)
             {
-                if (newTrip.Distance <= 0)
-                {
-                    throw new InvalidDistanceException("Kørsel ikke gennemført.");
-                }
-                if (_isEngineOn)
-                {
-                    _kilometer += newTrip.Distance;
-                    _trips.Add(newTrip);
-                }
-                else
-                {
-                    Console.WriteLine("Du skal starte motoren først..");
-                }
+                _kilometer += newTrip.Distance;
+                _trips.Add(newTrip);
             }
-            catch (InvalidDistanceException ex)
+            else
             {
-                Console.WriteLine($"Fejl: {ex.Message}");
+                throw new ArgumentException("Motoren skal være tændt");
             }
+
         }      
         public void PrintCar(bool First = false)
         {
-            string infoHeader = String.Format("{0,-13} {1,-13} {2,-13} {3,-13} {4,-13}", "Bilmærke", "Model", "Odometer", "Km/l", "Årgang");
-            string line = new string('-', 63);
+            string infoHeader = String.Format("{0,-13} {1,-13} {2,-13} {3,-10} {4,-13} {5,-13}", "Bilmærke", "Model", "Odometer", "Km/l", "Årgang", "Nummerplade");
+            string line = new string('-', 81);
 
             if (First)
             {
@@ -178,10 +185,12 @@ namespace CarProjektBeta
                 Console.ForegroundColor = ConsoleColor.Red;
             else if (Odometer > 100000)
                 Console.ForegroundColor = ConsoleColor.Yellow;
+            else if (Odometer > 0 && Odometer <= 15000)
+                Console.ForegroundColor = ConsoleColor.Green;
             else
                 Console.ForegroundColor = ConsoleColor.White;
 
-            string carDetails = string.Format("{0,-13} {1,-13} {2,-13} {3,-13} {4,-13}", Brand, Model, Odometer, KmPerLiter, Year);
+            string carDetails = string.Format("{0,-13} {1,-13} {2,-13} {3,-10} {4,-13} {5,-13}", Brand, Model, Odometer, KmPerLiter, Year, LicensePlate);
             Console.WriteLine(carDetails);
 
             Console.ResetColor();
@@ -206,12 +215,12 @@ namespace CarProjektBeta
         //Metoder til at gemme filer
         public override string ToString()
         {
-            return $"{Brand};{Model};{Odometer};{_fuelSource};{KmPerLiter};{Year}";
+            return $"{Brand};{Model};{Odometer};{_fuelSource};{KmPerLiter};{Year};{LicensePlate}";
         }
         public static Car FromString(string data)
         {
             string[] parts = data.Split(';');
-            if (parts.Length < 6) return null;
+            if (parts.Length < 7) return null;
 
             string brand = parts[0];
             string model = parts[1];
@@ -219,8 +228,9 @@ namespace CarProjektBeta
             FuelType fuelSource = Enum.Parse<FuelType>(parts[3]);
             double kmPerLiter = double.Parse(parts[4]);
             int year = int.Parse(parts[5]);
+            string licensePlate = parts[6];
 
-            Car car = new Car(brand, model, year, odometer, fuelSource, kmPerLiter);
+            Car car = new Car(brand, model, year, odometer, fuelSource, kmPerLiter, licensePlate);
 
             return car;
 

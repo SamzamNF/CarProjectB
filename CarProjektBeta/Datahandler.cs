@@ -51,10 +51,10 @@ namespace CarProjektBeta
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        Console.WriteLine($"Læsning af linje: {line}");  // Log linjen der læses
+                        //Console.WriteLine($"Læsning af linje: {line}");  // Log linjen der læses
 
-                        // Tjek om linjen repræsenterer en bil (6 felter)
-                        if (line.Split(';').Length == 6)
+                        // Tjek om linjen repræsenterer en bil (7 felter)
+                        if (line.Split(';').Length == 7)
                         {
                             // Hvis der allerede er en currentCar, tilføj den til listen først
                             if (currentCar != null)
@@ -94,13 +94,15 @@ namespace CarProjektBeta
 
         }
 
-        public void DeleteCarByModel(string modelName)
+        public void DeleteCarByModel(string licensePlate)
         {
             try
             {
                 List<Car> cars = LoadCarsAndTrips();
 
-                var carsToKeep = cars.Where(car => car.Model != modelName).ToList();
+                /*Filtrerer listen af biler for at beholde alle biler, hvis nummerplade ikke matcher den angivne licensePlate
+                dvs, hvis du skriver en nummerplade ind, gemmes alle undtagen den valgte. */
+                var carsToKeep = cars.Where(car => car.LicensePlate != licensePlate).ToList();
 
                 if (carsToKeep.Count == cars.Count)
                 {
@@ -109,7 +111,7 @@ namespace CarProjektBeta
                 else
                 {
                     AddCarsAndTrips(carsToKeep);
-                    Console.WriteLine($"Bilen med model {modelName} blev slettet fra databasen");
+                    Console.WriteLine($"Bilen med nummerpladen {licensePlate} blev slettet fra databasen");
                 }               
             }
             catch (Exception ex)

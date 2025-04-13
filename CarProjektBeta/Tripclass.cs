@@ -42,7 +42,7 @@ namespace CarProjektBeta
                 }
                 else
                 {
-                    Console.WriteLine("Indtast en distance der er mere end 0..");
+                    throw new InvalidDistanceException("Distance skal være størrere end 0..");
                 }
             }
         }
@@ -75,8 +75,8 @@ namespace CarProjektBeta
 
         public void PrintTripDetails(Car car, bool first = false)
         {
-            string infoHeader = String.Format("{0,-10} {1,-25} {2,-25} {3,-12} {4,-15} {5,-10}", "Distance", "Starttid", "Sluttid", "Varighed", "Brændstof", "Pris");
-            string line = new string('-', 100);
+            string infoHeader = String.Format("{0,-13} {1,-10} {2,-25} {3,-25} {4,-12} {5,-15} {6,-10}", "Nummerplade", "Distance", "Starttid", "Sluttid", "Varighed", "Brændstof", "Pris");
+            string line = new string('-', 120);
 
             if (first)
             {
@@ -94,9 +94,9 @@ namespace CarProjektBeta
             else if (CalculateDuration() > TimeSpan.FromHours(3))
                 Console.ForegroundColor = ConsoleColor.Yellow;
             else
-                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = ConsoleColor.White;
                             
-            string tripDetails = String.Format("{0,-10} {1,-25} {2,-25} {3,-12} {4,-15:F2} {5,-10:F2}", Distance, StartTime, EndTime, CalculateDuration().ToString(@"hh\:mm\:ss"), FuelConsumed(car), CalculateTripPrice(car));
+            string tripDetails = String.Format("{0,-13} {1,-10} {2,-25} {3,-25} {4,-12} {5,-15:F2} {6,-10:F2}", car.LicensePlate, Distance, StartTime, EndTime, CalculateDuration().ToString(@"hh\:mm\:ss"), FuelConsumed(car), CalculateTripPrice(car));
             Console.WriteLine(tripDetails);
 
             Console.ResetColor();

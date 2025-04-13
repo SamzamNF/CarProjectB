@@ -93,9 +93,9 @@ namespace BilProjektBeta
             else
             {
                 CarList();
-                Console.Write("Vælg model du gerne vil slette: ");
-                string modelName = Console.ReadLine();
-                datahandler.DeleteCarByModel(modelName);
+                Console.Write("Vælg bil du gerne vil slette med nummerpladen: ");
+                string licensePlate = Console.ReadLine();
+                datahandler.DeleteCarByModel(licensePlate);
                 cars = datahandler.LoadCarsAndTrips(); // Opdaterer listen af biler fra filen
             }
             MenuReturn();
@@ -105,9 +105,9 @@ namespace BilProjektBeta
         {
             Console.Clear();
             CarList();
-            Console.Write("Vælg modelnavn for at bruge bilen: ");
-            string modelPick = Console.ReadLine();
-            userCar = ChooseCar(cars, modelPick);
+            Console.Write("\nVælg nummerplade for at bruge bilen: ");
+            string licensePlate = Console.ReadLine();
+            userCar = ChooseCar(cars, licensePlate);
             MenuReturn();
         }
 
@@ -138,23 +138,31 @@ namespace BilProjektBeta
             MenuReturn();
         }
 
+        //Skal nok gøre så du får fejl FØR du prøver at køre, i stedet for efter hvis engine ikke er tændt
         static void DriveCar()
         {
             Console.Clear();
             if (userCar != null)
             {
                 Trip newTrip = CreateTrip();
-                if (newTrip != null)
+                //CalculateTriPrice har en try-cacth der fanger og sender fejlbesked hvis der divideres med 0.
+                if (newTrip != null && newTrip.CalculateTripPrice(userCar) > 0)
                 {
-                    if (newTrip.CalculateTripPrice(userCar) > 0)
+                    //Drive metoden kaster en fejl hvis moteren ikke er tændt, som catches her.
+                    try
                     {
                         userCar.Drive(newTrip);
                         Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {userCar.Odometer}km");
 
-                        // Opdaterer bilen i listen, hvis modelnavnet matcher, opdateres den gamle bil i listen med userCar
-                        cars = cars.Select(car => car.Model == userCar.Model ? userCar : car).ToList();
+                        // Opdaterer bilen i listen, hvis nummerpladen matcher, opdateres den gamle bil i listen med userCar
+                        // Går igennem alle biler i listen
+                        cars = cars.Select(car => car.LicensePlate == userCar.LicensePlate ? userCar : car).ToList();
 
                         datahandler.AddCarsAndTrips(cars); // Gemmer opdaterede data i filen
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Console.WriteLine(ex.Message);
                     }
                 }
                               
@@ -307,11 +315,16 @@ namespace BilProjektBeta
         {
             Console.Clear();
             CarList();
-            Console.Write("\nVælg hvilken model du vil se ture på: ");
-            string modelChoice = Console.ReadLine();
+            Console.Write("\nVælg hvilken bil du vil se ture på, indtast nummerpladen: ");
+            string licensePlate = Console.ReadLine();
             Console.Clear();
 
-            Car carTrips = ChooseCar(cars, modelChoice);
+            Car carTrips = ChooseCar(cars, licensePlate);
+
+            if (carTrips == null)
+            {
+                return;
+            }
 
             for (int i = 0; i < carTrips.Trips.Count; i++)
             {
@@ -373,6 +386,8 @@ namespace BilProjektBeta
                     double kmPerLiter = Convert.ToDouble(Console.ReadLine());
                     Console.Write("Indtast bilens brændstofstype: ");
                     string fuelInput = Console.ReadLine().ToLower();
+                    Console.Write("Indtast bilens nummerplade (7 tegn): ");
+                    string licensePlate = Console.ReadLine().ToUpper();
 
                     FuelType fuelSource = FuelType.None;
                     switch (fuelInput)
@@ -384,14 +399,14 @@ namespace BilProjektBeta
                         default: Console.WriteLine("Ugyldigt valg, prøv igen!"); break;
                     }
 
-                    newCar = new Car(brand, model, year, odometer, fuelSource, kmPerLiter);
+                    newCar = new Car(brand, model, year, odometer, fuelSource, kmPerLiter, licensePlate);
 
                     cars.Add(newCar);
                     datahandler.AddCarsAndTrips(cars);
                     Console.WriteLine("Bilen blev oprettet og gemt i filen.");
 
                 }
-                catch (Exception ex)
+                catch (Exception ex) // Fanger alle generelle exceptions - altså fanger ikke en specifik en.
                 {
                     Console.WriteLine();
                     Console.WriteLine(ex.Message);
@@ -424,11 +439,16 @@ namespace BilProjektBeta
 
                 return new Trip(distance, tripDate, startTime, endTime);
             }
-            catch (FormatException ex)
+            //Throw new arguement findes under tripclass og distance property.
+            catch (InvalidDistanceException ex)
+            {
+                Console.WriteLine($"Fejl: {ex.Message}");
+            }
+            catch (FormatException)
             {
                 Console.WriteLine("Fejl: Forkert format på input. Trip ikke oprettet.");
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 Console.WriteLine("Fejl: Du har ikke indtastet en værdi. Trip ikke oprettet");
             }
@@ -455,7 +475,7 @@ namespace BilProjektBeta
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Cyan;
-            string infoHeader = string.Format("{0,-15} {1,-15} {2,-10}", "Mærke", "Model", "Årgang");
+            string infoHeader = string.Format("{0,-15} {1,-15} {2,-10} {3,-13}", "Mærke", "Model", "Årgang", "Nummerplade");
             Console.WriteLine(infoHeader);
 
             Console.ForegroundColor = ConsoleColor.White;
@@ -464,54 +484,45 @@ namespace BilProjektBeta
             Console.ForegroundColor = ConsoleColor.White;
             foreach (Car car in cars)
             {
-                string printInfo = string.Format("{0,-15} {1,-15} {2,-10}", car.Brand, car.Model, car.Year);
+                string printInfo = string.Format("{0,-15} {1,-15} {2,-10} {3,-13}", car.Brand, car.Model, car.Year, car.LicensePlate);
                 Console.WriteLine(printInfo);
             }
             Console.ResetColor();
         }
 
         //Søg efter bil i liste metode. Behøver i princip kun foreach loopet til det.
-        static Car ChooseCar(List<Car> cars, string modelPick)
+        static Car ChooseCar(List<Car> cars, string licensePlate)
         {
-            Car searchCar = null;
-            while (searchCar == null)
+            try
             {
-                try
+                if (cars.Count == 0)
                 {
-                    if (cars.Count == 0)
-                    {
-                        throw new Exception("Der er ingen biler i databasen");
-                    }
-
-                    foreach (Car car in cars)
-                    {
-                        if (car.Model == modelPick)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"Du har valgt: {car.Brand} {car.Model}\n");
-                            Console.ResetColor();
-                            searchCar = car;
-                            break;
-                        }
-                    }
-
-                    if (searchCar == null)
-                    {
-                        Console.Clear();
-                        throw new Exception("Ingen bil med den model blev fundet");
-                    }
+                    throw new CarNotFoundException("Der er ingen biler i databasen");
                 }
-                catch (Exception ex)
+
+                // Find den første bil i listen, hvor modelnavnet matcher 'licensePlate'. Hvis det ikke findes, returneres null.
+                Car searchCar = cars.FirstOrDefault(car => car.LicensePlate == licensePlate);
+
+                if (searchCar != null)
                 {
-                    Console.WriteLine(ex.Message);
-                    Console.WriteLine("Prøv venligst igen.");
-                    CarList();
-                    Console.Write("\nVælg hvilken model du vil se ture på: ");
-                    modelPick = Console.ReadLine();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"Du har valgt: {searchCar.Brand} {searchCar.Model}\nNummerplade: {searchCar.LicensePlate}\n");
+                    Console.ResetColor();
+                    return searchCar;
+                }
+                else
+                {
                     Console.Clear();
+                    throw new CarNotFoundException("Ingen bil med den nummerplade blev fundet");
                 }
             }
-            return searchCar;
+            catch (CarNotFoundException ex)
+            {
+                Console.Clear();
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("Du bliver nu sendt tilbage til hovedmenuen...");
+                return null;
+            }
         }
 
     }
