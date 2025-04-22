@@ -49,7 +49,7 @@ namespace BilProjektBeta
                 case '4': PrintCarDetails(); break;
                 case '5': PrintTripDetails(); break;
                 case '6': Console.WriteLine("Afslutter programmet..."); break;
-                default: Console.WriteLine("Ugyldigt valg, prøv igen"); break;
+                default: Console.WriteLine("Ugyldigt valg, prøv igen"); Thread.Sleep(1500); break;
             }
         }
 
