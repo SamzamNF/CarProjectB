@@ -144,7 +144,9 @@ namespace BilProjektBeta
             Console.Clear();
             if (userCar != null)
             {
+                //Trip bliver tilføjet ved Drive metoden til listen af trips på bilen i car class
                 Trip newTrip = CreateTrip();
+
                 //CalculateTriPrice har en try-cacth der fanger og sender fejlbesked hvis der divideres med 0.
                 if (newTrip != null && newTrip.CalculateTripPrice(userCar) > 0)
                 {
