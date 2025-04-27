@@ -9,10 +9,10 @@ namespace TestUnitBilProjektBeta
         public void TestDriveMethodIfEngineOn()
         {
             // Arrange
-            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18);
+            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18, "AB12345");
             carTest.ToggleEngine(true);
 
-            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1));
+            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1), carTest.LicensePlate);  
             tripTest.Distance = 100;
 
             // Act
@@ -27,10 +27,10 @@ namespace TestUnitBilProjektBeta
         public void TestDriveMethodIfEngineOff()
         {
             // Arrange
-            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18);
+            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18, "AB12345");
             carTest.ToggleEngine(false);
 
-            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1));
+            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1), carTest.LicensePlate);
             tripTest.Distance = 100;
 
             // Act
@@ -44,7 +44,7 @@ namespace TestUnitBilProjektBeta
         public void TestTurnEngineOnMethod()
         {
             // Arrange
-            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18);
+            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18, "AB12345");
 
             // Act
             carTest.ToggleEngine(true);
@@ -57,7 +57,7 @@ namespace TestUnitBilProjektBeta
         public void TestTurnEngineOffMethod()
         {
             // Arrange
-            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18);
+            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18, "AB12345");
 
             // Act
             carTest.ToggleEngine(false);
@@ -70,9 +70,9 @@ namespace TestUnitBilProjektBeta
         public void TestPriceDetails()
         {
             // Arrange
-            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18);
+            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18, "AB12345");
 
-            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1));
+            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1), carTest.LicensePlate);
             tripTest.Distance = 100;
             carTest.KmPerLiter = 18;
             carTest.FuelSource = FuelType.Benzin;
@@ -90,9 +90,9 @@ namespace TestUnitBilProjektBeta
         public void TestCatchTripPrice()
         {
             // Arrange
-            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 0);
+            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18, "AB12345");
 
-            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1));
+            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1), carTest.LicensePlate);
             tripTest.Distance = 10;
 
             // Act
@@ -106,10 +106,10 @@ namespace TestUnitBilProjektBeta
         public void TestDriveMethodException()
         {
             // Arrange
-            Car carTest = new Car("Toyota", "Corolla", 2020, 500, FuelType.Benzin, 18);
+            Car carTest = new Car("Toyota", "Corolla", 2020, 0, FuelType.Benzin, 18, "AB12345");
             carTest.ToggleEngine(true);
 
-            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1));
+            Trip tripTest = new Trip(0, DateTime.Now, DateTime.Now, DateTime.Now.AddHours(1), carTest.LicensePlate);
             tripTest.Distance = -250;
 
             // Act

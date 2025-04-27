@@ -1,16 +1,17 @@
-﻿using CarProjektBeta;
+﻿using System.Runtime.Intrinsics.X86;
+using System.Text.RegularExpressions;
+using CarProjektBeta;
 
 namespace BilProjektBeta
 {
     internal class Program
     {
-        static Datahandler datahandler = new Datahandler("CarsAndTrips.txt");
-        static List<Car> cars = new List<Car>();
-        static Car userCar = null;
+        private static ICarRepository carRepository = new FileCarRepository("cars.txt");
+        private static ITripRepository tripRepository = new FileTripRepository("trips.txt");
+        private static Car userCar;
 
         static void Main(string[] args)
         {
-            cars = datahandler.LoadCarsAndTrips();
             ShowMainMenu();
         }
 
@@ -79,14 +80,14 @@ namespace BilProjektBeta
         static void AddCar()
         {
             Console.Clear();
-            userCar = CreateCar(datahandler);
+            userCar = CreateCar();
             MenuReturn();
         }
 
         static void DeleteCar()
         {
             Console.Clear();
-            if (cars.Count == 0)
+            if (carRepository.GetAll().Count == 0)
             {
                 Console.WriteLine("Der findes ingen biler i databasen");
             }
@@ -95,8 +96,7 @@ namespace BilProjektBeta
                 CarList();
                 Console.Write("Vælg bil du gerne vil slette med nummerpladen: ");
                 string licensePlate = Console.ReadLine();
-                datahandler.DeleteCarByModel(licensePlate);
-                cars = datahandler.LoadCarsAndTrips(); // Opdaterer listen af biler fra filen
+                carRepository.Delete(licensePlate); // Sletter bilen direkte fra filen
             }
             MenuReturn();
         }
@@ -107,7 +107,7 @@ namespace BilProjektBeta
             CarList();
             Console.Write("\nVælg nummerplade for at bruge bilen: ");
             string licensePlate = Console.ReadLine();
-            userCar = ChooseCar(cars, licensePlate);
+            userCar = ChooseCar(licensePlate);
             MenuReturn();
         }
 
@@ -154,13 +154,12 @@ namespace BilProjektBeta
                     try
                     {
                         userCar.Drive(newTrip);
+                        carRepository.Update(userCar);
                         Console.WriteLine($"Du har kørt {newTrip.Distance}km. Nyt kilometertal: {userCar.Odometer}km");
 
-                        // Opdaterer bilen i listen, hvis nummerpladen matcher, opdateres den gamle bil i listen med userCar
-                        // Går igennem alle biler i listen
-                        cars = cars.Select(car => car.LicensePlate == userCar.LicensePlate ? userCar : car).ToList();
+                        tripRepository.Add(newTrip);
+                        //Tilføjer turen direkte til trip fil
 
-                        datahandler.AddCarsAndTrips(cars); // Gemmer opdaterede data i filen
                     }
                     catch (ArgumentException ex)
                     {
@@ -196,12 +195,13 @@ namespace BilProjektBeta
         static void PrintCarDetails()
         {
             Console.Clear();
-            if (cars.Count == 0)
+            if (carRepository.GetAll().Count ==  0)
             {
                 Console.WriteLine("Der er ingen biler i databasen");
             }
             else
             {
+                var cars = carRepository.GetAll();
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"Biler fundet i databasen: {cars.Count}\n");
                 Console.ResetColor();
@@ -249,9 +249,20 @@ namespace BilProjektBeta
             Console.Clear();
             if (userCar != null)
             {
-                for (int i = 0; i < userCar.Trips.Count; i++)
+                var trips = tripRepository.GetAll().Where(t => t.LicensePlate == userCar.LicensePlate).ToList();
+
+                Console.WriteLine($"Ture for den valgte bil: {userCar.LicensePlate}");
+
+                if (trips.Count == 0)
                 {
-                    userCar.Trips[i].PrintTripDetails(userCar, i == 0);
+                    Console.WriteLine($"Ingen ture fundet for den valgte bil: {userCar.LicensePlate}");
+                    MenuReturn();
+                    return;
+                }
+
+                for (int i = 0; i < trips.Count; i++)
+                {
+                    trips[i].PrintTripDetails(userCar, i == 0);
                 }
             }
             else
@@ -263,24 +274,30 @@ namespace BilProjektBeta
 
         static void SearchTripsByDate()
         {
-            //Skal evt ændres så den kan finde en trip på søgt dato, på alle car trips - ikke kun det valgte objekt.
             Console.Clear();
             Console.Write("Indtast datoen for at finde ture (dd-MM-yyyy): ");
             DateTime date = Convert.ToDateTime(Console.ReadLine());
 
-            List<Trip> tripsByDate = userCar.GetTripsByDate(date);
+            //Henter alle trips med GetAll(), og filtrer så, så trips listen kun gemmer dem der matcher variablen date ved at bruge "Where tripDate objekt = søgte date" linq udtryk.
+            List<Trip> trips = tripRepository.GetAll().Where(t => t.TripDate.Date == date.Date).ToList();
 
-            if (tripsByDate.Count == 0)
+            if (!trips.Any())
             {
-                Console.WriteLine("Ingen ture blev fundet på denne dato");
+                Console.WriteLine($"Ingen ture fundet for datoen: {date:dd/MM/yyyy}");
+                MenuReturn();
+                return;
             }
-            else
-            {
-                Console.WriteLine($"\nDer blev fundet {tripsByDate.Count} tur(e) på datoen.");
 
-                for (int i = 0; i < tripsByDate.Count; i++)
+            Console.WriteLine($"Ture for datoen: {date:dd/MM/yyyy}");
+            bool isFirst = true;
+            foreach (var trip in trips)
+            {
+                //Finder bilen der matcher med nummerpladen fra trip filen, og sætter car objekt til denne bil så den kan bruge PrintTripDetails metoden som kræver et car objekt
+                Car car = carRepository.GetByLicensePlate(trip.LicensePlate);
+                if (car != null)
                 {
-                    tripsByDate[i].PrintTripDetails(userCar, i == 0);
+                    trip.PrintTripDetails(car, isFirst);
+                    isFirst = false;
                 }
             }
             MenuReturn();
@@ -288,27 +305,27 @@ namespace BilProjektBeta
 
         static void PrintAllTripsInDatabase()
         {
-            //bool first sørger for overskrift kun printes en gang
             Console.Clear();
-            bool anyTrips = false;
-            bool first = true;
 
-            foreach (Car car in cars)
-            {
-                if (car.Trips.Count > 0)
-                {
-                    anyTrips = true;
-
-                    for (int i = 0; i < car.Trips.Count; i++)
-                    {
-                        car.Trips[i].PrintTripDetails(car, first);
-                        first = false;
-                    }
-                }
-            }
-            if (!anyTrips)
+            List<Trip> trips = tripRepository.GetAll();
+            //Sortere dem så ture alle ture under de enkelte LicensePlates ligger sammen
+            trips.Sort((t1, t2) => t1.LicensePlate.CompareTo(t2.LicensePlate));
+            if (trips.Count == 0)
             {
                 Console.WriteLine("Ingen ture blev fundet");
+                return;
+            }
+
+            bool isFirst = true;
+            foreach (var trip in trips)
+            {
+                //Finder bilen der matcher med nummerpladen fra trip filen, og laver car objekt til denne bil.
+                Car car = carRepository.GetByLicensePlate(trip.LicensePlate);
+                if (car != null)
+                {
+                    trip.PrintTripDetails(car, isFirst);
+                    isFirst = false;
+                }
             }
             MenuReturn();
         }
@@ -321,16 +338,26 @@ namespace BilProjektBeta
             string licensePlate = Console.ReadLine();
             Console.Clear();
 
-            Car carTrips = ChooseCar(cars, licensePlate);
+            List<Trip> carTrips = tripRepository.GetAll().Where(t => t.LicensePlate == licensePlate).ToList();
 
-            if (carTrips == null)
+            if (carTrips.Count == 0)
             {
+                Console.WriteLine($"Ingen ture fundet for bilen med nummerplade: {licensePlate}");
+                MenuReturn();
                 return;
             }
 
-            for (int i = 0; i < carTrips.Trips.Count; i++)
+            Car car = carRepository.GetByLicensePlate(licensePlate);
+            if (car == null)
             {
-                carTrips.Trips[i].PrintTripDetails(carTrips, i == 0);
+                Console.WriteLine($"Bilen med nummerplade {licensePlate} blev ikke fundet.");
+                MenuReturn();
+                return;
+            }
+            Console.WriteLine($"{car.Brand} {car.Model} fundet med {carTrips.Count} tur(e)");
+            for (int i = 0; i < carTrips.Count; i++)
+            {
+                carTrips[i].PrintTripDetails(car, i == 0);
             }
             MenuReturn();
         }
@@ -368,7 +395,7 @@ namespace BilProjektBeta
         }
 
         //Metode til at lave en bil
-        static Car CreateCar(Datahandler datahandler)
+        static Car CreateCar()
         {
             Car newCar = null;
             while (newCar == null)
@@ -403,8 +430,7 @@ namespace BilProjektBeta
 
                     newCar = new Car(brand, model, year, odometer, fuelSource, kmPerLiter, licensePlate);
 
-                    cars.Add(newCar);
-                    datahandler.AddCarsAndTrips(cars);
+                    carRepository.Add(newCar);
                     Console.WriteLine("Bilen blev oprettet og gemt i filen.");
 
                 }
@@ -439,7 +465,7 @@ namespace BilProjektBeta
                 DateTime endTime = DateTime.ParseExact(Console.ReadLine(), "HH:mm", null);
                 endTime = tripDate.Date + endTime.TimeOfDay; // Kombiner dato og tid
 
-                return new Trip(distance, tripDate, startTime, endTime);
+                return new Trip(distance, tripDate, startTime, endTime, userCar.LicensePlate);
             }
             //Throw new arguement findes under tripclass og distance property.
             catch (InvalidDistanceException ex)
@@ -484,7 +510,7 @@ namespace BilProjektBeta
             Console.WriteLine(new string('-', 45));
 
             Console.ForegroundColor = ConsoleColor.White;
-            foreach (Car car in cars)
+            foreach (Car car in carRepository.GetAll())
             {
                 string printInfo = string.Format("{0,-15} {1,-15} {2,-10} {3,-13}", car.Brand, car.Model, car.Year, car.LicensePlate);
                 Console.WriteLine(printInfo);
@@ -493,17 +519,17 @@ namespace BilProjektBeta
         }
 
         //Søg efter bil i liste metode. Behøver i princip kun foreach loopet til det.
-        static Car ChooseCar(List<Car> cars, string licensePlate)
+        static Car ChooseCar(string licensePlate)
         {
             try
             {
-                if (cars.Count == 0)
+                if (carRepository.GetAll().Count == 0)
                 {
                     throw new CarNotFoundException("Der er ingen biler i databasen");
                 }
 
-                // Find den første bil i listen, hvor modelnavnet matcher 'licensePlate'. Hvis det ikke findes, returneres null.
-                Car searchCar = cars.FirstOrDefault(car => car.LicensePlate == licensePlate);
+                // Find den første bil i listen, hvor modelnavnet matcher 'licensePlate'.
+                Car searchCar = carRepository.GetByLicensePlate(licensePlate);
 
                 if (searchCar != null)
                 {

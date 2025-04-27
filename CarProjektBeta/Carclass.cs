@@ -197,19 +197,6 @@ namespace CarProjektBeta
 
 
         }
-        public List<Trip> GetTripsByDate(DateTime date)
-        {
-            List<Trip> tripsByDate = new();
-
-            for (int i = 0; i < Trips.Count; i++)
-            {
-                if (Trips[i].TripDate == date)
-                {
-                    tripsByDate.Add(Trips[i]);
-                }
-            }
-            return tripsByDate;
-        }
 
 
         //Metoder til at gemme filer

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection.PortableExecutable;
-namespace CarProjektBeta
+/*namespace CarProjektBeta
 {
     public class Datahandler
     {
@@ -32,11 +32,11 @@ namespace CarProjektBeta
             {
                 Console.WriteLine($"Fejl under skrivning: {ex.Message}");
             }
-            /* Denne del er ikke nødvendig, da "using" allerede lukker filen ordenligt.
-            finally
-            {
-                sw?.Close();
-            }*/
+            // Denne del er ikke nødvendig, da "using" allerede lukker filen ordenligt.
+            //finally
+            //{
+            //    sw?.Close();
+            //}
         }
 
         public List<Car> LoadCarsAndTrips()
@@ -100,8 +100,8 @@ namespace CarProjektBeta
             {
                 List<Car> cars = LoadCarsAndTrips();
 
-                /*Filtrerer listen af biler for at beholde alle biler, hvis nummerplade ikke matcher den angivne licensePlate
-                dvs, hvis du skriver en nummerplade ind, gemmes alle undtagen den valgte. */
+                //Filtrerer listen af biler for at beholde alle biler, hvis nummerplade ikke matcher den angivne licensePlate
+                //dvs, hvis du skriver en nummerplade ind, gemmes alle undtagen den valgte.
                 var carsToKeep = cars.Where(car => car.LicensePlate != licensePlate).ToList();
 
                 if (carsToKeep.Count == cars.Count)
@@ -122,5 +122,5 @@ namespace CarProjektBeta
         
     }
 
-}
+}*/
 

@@ -8,13 +8,15 @@ namespace CarProjektBeta
         private DateTime _tripDate;
         private DateTime _startTime;
         private DateTime _endTime;
+        private string _licensePlate;
 
-        public Trip(double distance, DateTime tripDate, DateTime startTime, DateTime endTime)
+        public Trip(double distance, DateTime tripDate, DateTime startTime, DateTime endTime, string licensePlate)
         {
             _distance = distance;
             _tripDate = tripDate;
             _startTime = startTime;
             _endTime = endTime;
+            _licensePlate = licensePlate;
         }
         public DateTime TripDate
         {
@@ -40,11 +42,16 @@ namespace CarProjektBeta
                 {
                     _distance = value;
                 }
-                else
+                /*else
                 {
                     throw new InvalidDistanceException("Distance skal være størrere end 0..");
-                }
+                }*/
             }
+        }
+        public string LicensePlate
+        {
+            get { return _licensePlate; }
+            set { _licensePlate = value; }
         }
         public double CalculateTripPrice(Car car)
         {
@@ -95,7 +102,7 @@ namespace CarProjektBeta
                 Console.ForegroundColor = ConsoleColor.Yellow;
             else
                 Console.ForegroundColor = ConsoleColor.White;
-                            
+
             string tripDetails = String.Format("{0,-13} {1,-10} {2,-25} {3,-25} {4,-12} {5,-15:F2} {6,-10:F2}", car.LicensePlate, Distance, StartTime, EndTime, CalculateDuration().ToString(@"hh\:mm\:ss"), FuelConsumed(car), CalculateTripPrice(car));
             Console.WriteLine(tripDetails);
 
@@ -105,29 +112,26 @@ namespace CarProjektBeta
         //Metoder til filer
         public override string ToString()
         {
-            return $"{Distance};{TripDate:dd/MM/yyyy};{StartTime:HH:mm};{EndTime:HH:mm}";
+            return $"{Distance};{TripDate:dd-MM-yyyy};{StartTime:HH:mm};{EndTime:HH:mm};{LicensePlate}";
+
         }
         public static Trip FromString(string data)
         {
             string[] parts = data.Split(';');
-            if (parts.Length != 4) return null;
-
+            if (parts.Length != 5) return null;
             double distance = double.Parse(parts[0]);
-            
             DateTime tripDate = DateTime.ParseExact(parts[1], "dd-MM-yyyy", null);
-
-            // Kombiner datoen fra tripDate med tidspunkterne
             DateTime startTime = DateTime.ParseExact(parts[2], "HH:mm", null);
-            startTime = tripDate.Date + startTime.TimeOfDay; // Kombiner dato og tid
-
+            startTime = tripDate.Date + startTime.TimeOfDay;
             DateTime endTime = DateTime.ParseExact(parts[3], "HH:mm", null);
-            endTime = tripDate.Date + endTime.TimeOfDay; // Kombiner dato og tid
+            endTime = tripDate.Date + endTime.TimeOfDay;
+            string licensePlate = parts[4];
 
+            return new Trip(distance, tripDate, startTime, endTime, licensePlate);
 
-            return new Trip(distance, tripDate, startTime, endTime);
         }
 
     }
-    
+
 
 }
