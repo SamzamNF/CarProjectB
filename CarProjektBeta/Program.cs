@@ -140,7 +140,6 @@ namespace BilProjektBeta
             else
             {
                 PrintColoredTextWriteLine("Vælg en bil i menuen først..");
-                MenuReturn();
             }
             MenuReturn();
         }
