@@ -30,12 +30,16 @@ public class FileTripRepository : ITripRepository
 
         try
         {
-            foreach (var line in File.ReadLines(_filePath))
+            using (var sr = new StreamReader(_filePath))
             {
-                var trip = Trip.FromString(line);
-                if (trip != null)
+                string line;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    trips.Add(trip);
+                    var trip = Trip.FromString(line);
+                    if (trip != null)
+                    {
+                        trips.Add(trip);
+                    }
                 }
             }
         }
@@ -46,22 +50,20 @@ public class FileTripRepository : ITripRepository
 
         return trips;
     }
-
     public void Add(Trip trip)
     {
-        var allTrips = GetAll();
-        allTrips.Add(trip);
-
         try
         {
-            File.AppendAllText(_filePath, trip.ToString() + Environment.NewLine);
+            using (var sw = new StreamWriter(_filePath, append: true))
+            {
+                sw.WriteLine(trip.ToString());
+            }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Fejl ved skrivning til fil: {ex.Message}");
         }
     }
-
     public void Update(Trip trip)
     {
         var trips = GetAll();
@@ -100,7 +102,13 @@ public class FileTripRepository : ITripRepository
     {
         try
         {
-            File.WriteAllLines(_filePath, trips.Select(t => t.ToString()));
+            using (var sw = new StreamWriter(_filePath, append: false))
+            {
+                foreach (var trip in trips)
+                {
+                    sw.WriteLine(trip.ToString());
+                }
+            }
         }
         catch (Exception ex)
         {

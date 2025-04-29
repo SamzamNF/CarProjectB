@@ -19,29 +19,47 @@ public class FileCarRepository : ICarRepository
         return cars.FirstOrDefault(c => c.LicensePlate == licensePlate);
     }
 
+    
     public List<Car> GetAll()
     {
         var cars = new List<Car>();
 
-        foreach (var line in File.ReadLines(_filePath))
+        try
         {
-            var car = Car.FromString(line);
-            if (car != null)
+            using (StreamReader sw = new StreamReader(_filePath))
             {
-                cars.Add(car);
+                string line;
+                while ((line = sw.ReadLine()) != null)
+                {
+                    var car = Car.FromString(line);
+                    if (car != null)
+                    {
+                        cars.Add(car);
+                    }
+                }
             }
         }
-
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fejl ved læsning af fil: {ex.Message}");
+        }
         return cars;
     }
 
     public void Add(Car car)
     {
-        var allCars = GetAll();
-        allCars.Add(car);
-        File.AppendAllText(_filePath, car.ToString() + Environment.NewLine);
+        try
+        {
+            using (StreamWriter sr = new StreamWriter(_filePath, append: true))
+            {
+                sr.WriteLine(car.ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fejl ved skrivning til fil: {ex.Message}");
+        }
     }
-
     public void Update(Car car)
     {
         // Henter alle biler fra filen og gemmer dem i en liste
@@ -75,6 +93,19 @@ public class FileCarRepository : ICarRepository
 
     private void SaveAll(List<Car> cars)
     {
-        File.WriteAllLines(_filePath, cars.Select(c => c.ToString()));
+        try
+        {
+            using (StreamWriter sw = new StreamWriter(_filePath, append: false))
+            {
+                foreach (Car car in cars)
+                {
+                    sw.WriteLine(car.ToString());
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fejl ved skrivning til fil: {ex.Message}");
+        }
     }
 }

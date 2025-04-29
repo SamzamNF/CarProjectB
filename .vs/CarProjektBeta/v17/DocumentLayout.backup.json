@@ -7,20 +7,20 @@
       "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\filetriprepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\filetriprepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\tripclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\tripclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\carclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\carclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\filecarrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\filecarrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\filetriprepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\filetriprepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\tripclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|solutionrelative:carprojektbeta\\tripclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C95A9EB3-FE53-4663-87BC-69E3DBFCBBA5}|CarProjektBeta\\CarProjektBeta.csproj|c:\\users\\friis\\desktop\\b\u00F8ger\\git projekter\\carprojektbeta\\carprojectb\\carprojektbeta\\repointerfaces.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -62,26 +62,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "FileCarRepo.cs",
               "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\FileCarRepo.cs",
               "RelativeDocumentMoniker": "CarProjektBeta\\FileCarRepo.cs",
               "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\FileCarRepo.cs",
               "RelativeToolTip": "CarProjektBeta\\FileCarRepo.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAiwDQAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAIwGQAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-26T19:40:54.025Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "FileTripRepo.cs",
               "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\FileTripRepo.cs",
               "RelativeDocumentMoniker": "CarProjektBeta\\FileTripRepo.cs",
               "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\FileTripRepo.cs",
               "RelativeToolTip": "CarProjektBeta\\FileTripRepo.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAzwF4AAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAABYAAAAAAAAAAAAAAHQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-26T19:39:15.791Z",
               "EditorCaption": ""
@@ -96,8 +96,7 @@
               "RelativeToolTip": "CarProjektBeta\\RepoInterfaces.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T19:37:36.525Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-26T19:37:36.525Z"
             },
             {
               "$type": "Document",
@@ -149,7 +148,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Tripclass.cs",
               "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Tripclass.cs",
               "RelativeDocumentMoniker": "CarProjektBeta\\Tripclass.cs",
@@ -157,18 +156,17 @@
               "RelativeToolTip": "CarProjektBeta\\Tripclass.cs",
               "ViewState": "AgIAADIAAAAAAAAAAAAYwHQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-11T22:46:20.195Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-11T22:46:20.195Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Carclass.cs",
               "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Carclass.cs",
               "RelativeDocumentMoniker": "CarProjektBeta\\Carclass.cs",
               "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Carclass.cs",
               "RelativeToolTip": "CarProjektBeta\\Carclass.cs",
-              "ViewState": "AgIAALEAAAAAAAAAAAAAwMYAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAFwAAAAAAAAAAAAgwHgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-28T19:47:53.618Z",
               "EditorCaption": ""
@@ -179,9 +177,9 @@
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Program.cs",
               "RelativeDocumentMoniker": "CarProjektBeta\\Program.cs",
-              "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Program.cs*",
-              "RelativeToolTip": "CarProjektBeta\\Program.cs*",
-              "ViewState": "AgIAAF4BAAAAAAAAAAAawHwBAAANAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Friis\\Desktop\\B\u00F8ger\\GIT Projekter\\CarProjektBeta\\CarProjectB\\CarProjektBeta\\Program.cs",
+              "RelativeToolTip": "CarProjektBeta\\Program.cs",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAmwH8AAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-13T14:43:54.346Z",
               "EditorCaption": ""

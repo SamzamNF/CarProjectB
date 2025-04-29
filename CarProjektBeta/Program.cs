@@ -105,35 +105,42 @@ namespace BilProjektBeta
         {
             Console.Clear();
             CarList();
-            Console.Write("\nVælg nummerplade for at bruge bilen: ");
+            PrintColoredTextWrite("\nVælg nummerplade for at bruge bilen: ");
             string licensePlate = Console.ReadLine();
             userCar = ChooseCar(licensePlate);
             MenuReturn();
         }
 
+        
         static void Engine()
         {
             Console.Clear();
             if (userCar != null)
             {
-                Console.Write("\nVil du tænde eller slukke motoren? ");
-                string engineChoice = Console.ReadLine().ToLower();
-                if (engineChoice == "tænd" || engineChoice == "tænde")
+                PrintColoredOption(1, "Tænd motor");
+                PrintColoredOption(2, "Sluk motor");
+                PrintColoredOption(3, "Gå tilbage");
+
+                ConsoleKeyInfo tripChoice;
+                tripChoice = Console.ReadKey();
+
+                switch (tripChoice.KeyChar)
                 {
-                    userCar.ToggleEngine(true);
+                    case '1':
+                        Console.Clear();
+                        userCar.ToggleEngine(true);
+                        break;
+                    case '2':
+                        Console.Clear();
+                        userCar.ToggleEngine(false);
+                        break;
+                    default: return;
                 }
-                else if (engineChoice == "sluk" || engineChoice == "slukke")
-                {
-                    userCar.ToggleEngine(false);
-                }
-                else
-                {
-                    Console.WriteLine("Ugyldigt valg. Tænd eller sluk moteren med tænd / sluk");
-                }
-            }
+            }           
             else
             {
-                Console.WriteLine("Opret en bil i menu 1 først..");
+                PrintColoredTextWriteLine("Vælg en bil i menuen først..");
+                MenuReturn();
             }
             MenuReturn();
         }
@@ -144,6 +151,12 @@ namespace BilProjektBeta
             Console.Clear();
             if (userCar != null)
             {
+                if (userCar.IsEngineOn == false)
+                {
+                    Console.WriteLine("Tænd motoren først..");
+                    MenuReturn();
+                    return;
+                }
                 //Trip bliver tilføjet ved Drive metoden til listen af trips på bilen i car class
                 Trip newTrip = CreateTrip();
 
@@ -573,7 +586,7 @@ namespace BilProjektBeta
                 if (searchCar != null)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"Du har valgt: {searchCar.Brand} {searchCar.Model}\nNummerplade: {searchCar.LicensePlate}\n");
+                    Console.WriteLine($"\nDu har valgt: {searchCar.Brand} {searchCar.Model}\nNummerplade: {searchCar.LicensePlate}\n");
                     Console.ResetColor();
                     return searchCar;
                 }
