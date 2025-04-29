@@ -10,7 +10,7 @@
     }
     public interface ITripRepository
     {
-        Trip GetByLicensePlate(string licensePlate);
+        List<Trip> GetByLicensePlate(string licensePlate);
         List<Trip> GetAll();  // Returner en List i stedet for IEnumerable
         void Add(Trip trip);
         void Update(Trip trip);

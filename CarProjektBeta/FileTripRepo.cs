@@ -18,10 +18,10 @@ public class FileTripRepository : ITripRepository
         }
     }
 
-    public Trip GetByLicensePlate(string licensePlate)
+    public List<Trip> GetByLicensePlate(string licensePlate)
     {
         var trips = GetAll();
-        return trips.FirstOrDefault(t => t.LicensePlate == licensePlate);
+        return trips.Where(t => t.LicensePlate == licensePlate).ToList();
     }
 
     public List<Trip> GetAll()
@@ -82,6 +82,7 @@ public class FileTripRepository : ITripRepository
     public void Delete(string licensePlate)
     {
         var trips = GetAll();
+        //Bemærk, den sletter kun én trip. Brug Where i stedet for hvis alle med denne licensePlate skal slettes på én gang
         var tripToDelete = trips.FirstOrDefault(t => t.LicensePlate == licensePlate);
 
         if (tripToDelete != null)
@@ -91,7 +92,7 @@ public class FileTripRepository : ITripRepository
         }
         else
         {
-            Console.WriteLine("Trip not found for deletion.");
+            Console.WriteLine("Tur ikke fundet.");
         }
     }
 

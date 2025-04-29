@@ -36,7 +36,7 @@ namespace BilProjektBeta
             PrintColoredOption(2, "Kør en tur");
             PrintColoredOption(3, "Tjek om odometeret er et palindrom");
             PrintColoredOption(4, "Print bilernes oplysninger");
-            PrintColoredOption(5, "Print tur pris");
+            PrintColoredOption(5, "Adminstrer ture");
             PrintColoredOption(6, "Afslut programmet");
         }
 
@@ -222,7 +222,8 @@ namespace BilProjektBeta
             PrintColoredOption(2, "Søg tur med dato");
             PrintColoredOption(3, "Søg efter alle ture");
             PrintColoredOption(4, "Søg efter alle ture på en bil");
-            PrintColoredOption(5, "Gå tilbage");
+            PrintColoredOption(5, "Slet en tur");
+            PrintColoredOption(6, "Gå tilbage");
             ConsoleKeyInfo tripChoice;
             tripChoice = Console.ReadKey();
             switch (tripChoice.KeyChar)
@@ -238,6 +239,9 @@ namespace BilProjektBeta
                     break;
                 case '4':
                     PrintTripsForSpecificCar();
+                    break;
+                case '5':
+                    DeleteTrip();
                     break;
                 default:
                     break;
@@ -288,7 +292,7 @@ namespace BilProjektBeta
                 return;
             }
 
-            Console.WriteLine($"Ture for datoen: {date:dd/MM/yyyy}");
+            Console.WriteLine($"Ture for datoen: {date:dd/MM/yyyy}\n");
             bool isFirst = true;
             foreach (var trip in trips)
             {
@@ -313,6 +317,7 @@ namespace BilProjektBeta
             if (trips.Count == 0)
             {
                 Console.WriteLine("Ingen ture blev fundet");
+                MenuReturn();
                 return;
             }
 
@@ -338,7 +343,8 @@ namespace BilProjektBeta
             string licensePlate = Console.ReadLine();
             Console.Clear();
 
-            List<Trip> carTrips = tripRepository.GetAll().Where(t => t.LicensePlate == licensePlate).ToList();
+            //List<Trip> carTrips = tripRepository.GetAll().Where(t => t.LicensePlate == licensePlate).ToList();
+            List<Trip> carTrips = tripRepository.GetByLicensePlate(licensePlate);
 
             if (carTrips.Count == 0)
             {
@@ -359,6 +365,27 @@ namespace BilProjektBeta
             {
                 carTrips[i].PrintTripDetails(car, i == 0);
             }
+            MenuReturn();
+        }
+        static void DeleteTrip()
+        {
+            Console.Clear();
+            CarList();
+            PrintColoredTextWriteLine("Indtast nummerplade på en trip du vil fjerne:");
+            string licensePlate = Console.ReadLine();
+            var tripCount = tripRepository.GetByLicensePlate(licensePlate);
+
+            if (string.IsNullOrEmpty(licensePlate) || tripCount.Count == 0)
+            {
+                PrintColoredTextWriteLine($"Ingen trip blev fundet med nummerpladen: {licensePlate}");                
+            }
+            else
+            {
+                tripRepository.Delete(licensePlate);
+                PrintColoredTextWriteLine($"Du har slettet en trip fra bilen med nummerpladen: {licensePlate}");
+            }
+            
+
             MenuReturn();
         }
 
@@ -392,6 +419,18 @@ namespace BilProjektBeta
             Console.WriteLine("               ║");
             Console.WriteLine("╚══════════════════════════════════════════════╝");
 
+        }
+        public static void PrintColoredTextWriteLine(string text)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"{text}");
+            Console.ResetColor();
+        }
+        public static void PrintColoredTextWrite(string text)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"{text}");
+            Console.ResetColor();
         }
 
         //Metode til at lave en bil
@@ -507,7 +546,7 @@ namespace BilProjektBeta
             Console.WriteLine(infoHeader);
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(new string('-', 45));
+            Console.WriteLine(new string('-', 55));
 
             Console.ForegroundColor = ConsoleColor.White;
             foreach (Car car in carRepository.GetAll())
